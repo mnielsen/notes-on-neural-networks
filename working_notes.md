@@ -70,6 +70,12 @@ notes, and you certainly shouldn't rely on them!
   can swing around wildly.)  The algorithm in which the weights are
   fixed seems more biological.
   
+  Note that Williams and Zipser _do not_ offer any analysis of running
+  time for their algorithms, or an understanding of when it is likely
+  to work well, and when it is not.  It's very much in the empirical
+  let's-see-how-this-works style adopted through much of the neural
+  networks literature.
+  
   Summing up: the recurrent neural network works by, at each step,
   computing the sigmoid function of the weighted sum of the inputs and
   the previous step's outputs.  Training means specifying a set of
