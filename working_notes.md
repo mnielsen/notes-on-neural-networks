@@ -3,13 +3,13 @@
 **Working notes, by Michael Nielsen:** These are rough working notes,
 written as part of my study of neural networks.  Note that they really
 are _rough_, and I've made no attempt to clean them up.  There are
-many misunderstandings, misinterpretations, and outright errors in the
-notes.  I make no apology for this, nor do I have any interest in
-cleaning them up. As such, I don't advise reading the notes, and you
-certainly shouldn't rely on them!
+many misunderstandings, misinterpretations, omissions, and outright
+errors in the notes.  I make no apology for this, nor do I have any
+interest in cleaning them up. As such, I don't advise reading the
+notes, and you certainly shouldn't rely on them!
 
 **Williams and Zipser (1989):**
-  [link](http://scholar.google.ca/scholar?cluster=1352799553544912946&hl=en&as_sdt=0,5)
+  ([link](http://scholar.google.ca/scholar?cluster=1352799553544912946&hl=en&as_sdt=0,5))
   Provides a gradient-based learning method for recurrent neural
   networks.  
   
@@ -26,30 +26,33 @@ certainly shouldn't rely on them!
   neurons, and from each input to each neuron.  To compute a neuron's
   output at time $t+1$ we compute the weighted sum of the inputs and
   the outputs at time $t$, and apply the appropriate nonlinear
-  function (sigmoid, or whatever).  Note that in order to make sense
-  we must also specify the behaviour of the external inputs over time.
-  We can incorporate a bias by having an external input which is
-  always $1$.
+  function (sigmoid, or whatever).  Note that in order for this
+  description to make sense we must specify the behaviour of the
+  external inputs over time.  We can incorporate a bias by having an
+  external input which is always $1$.
   
-  So a recurrent neural network is a lot like a feedforward network,
+  So a recurrent neural network is just like a feedforward network,
   with a weight constraint: the weights in each layer are the same,
   over and over again.  Also, the inputs must be input to every layer
   in the network.
   
   Williams and Zipser take as their supervised training task the goal
   of getting neuron outputs to match certain desired training values
-  at certain times.  They define the total error to be the sum over
-  squares of the errors in individual neuron outputs.  And we can then
-  do simple gradient descent with that error function.  They derive a
-  simple dynamical system to describe how to improve the weights in
-  the network.
+  at certain times.  For instance, you could define a two-neuron
+  network that will _eventually_ produce the XOR of the inputs.
+  
+  They define the total error to be the sum over squares of the errors
+  in individual neuron outputs.  And we can then do ordinary gradient
+  descent with that error function.  They derive a simple dynamical
+  system to describe how to improve the weights in the network using
+  gradient descent.
 
   The above algorithm assumes that the weights in the network remain
   constant for all time.  Williams and Zipser then modify the learning
   algorithm, allowing it to change the weights at each step.  The idea
-  is simply to compute the total error at any given time, and then to
-  use gradient descent with that error function to update the weights.
-  (Similar to online learning in feedforward networks.)
+  is simply to compute the total error at any _given_ time, and then
+  to use gradient descent with that error function to update the
+  weights.  (Similar to online learning in feedforward networks.)
   
   Williams and Zipser describe a method of _teacher-forcing_,
   modifying the neural network by replacing the output of certain
@@ -58,7 +61,14 @@ certainly shouldn't rely on them!
   
   Unfortunately, it is still really unclear to me _why_ one would wish
   to use recurrent neural networks.  Williams and Zipser describe a
-  number of examples, but they don't seem terribly compelling.
+  number of examples, but they don't seem terribly compelling to me.
+  
+  The algorithm in which the weights can change seems very
+  non-physiological to me --- it verges on being an unmotivated
+  statistical model.  (I doubt that the weights in the brain swing
+  around wildly, but I'll bet that the weights found by this algorithm
+  can swing around wildly.)  The algorithm in which the weights are
+  fixed seems more biological.
   
   Summing up: the recurrent neural network works by, at each step,
   computing the sigmoid function of the weighted sum of the inputs and
