@@ -84,3 +84,25 @@ notes, and you certainly shouldn't rely on them!
   any given time step, computing the gradient, and updating the
   weights appropriately.
 
+**Compiling to neural networks:** One idea that may be interesting is
+  to create compilers which would translate a program written in a
+  conventional programming language into a neural network.  I'd be
+  especially interested in seeing how this works for AI workhorses
+  such as Prolog.  What could we learn from such a procedure?  (1)
+  Perhaps we could figure out how to link up multiple neural modules,
+  with one or more of the modules coming from the compiler? (2) Maybe
+  we could use a learning technique to further improve the performance
+  of the compiled network.  Googling doesn't reveal a whole lot,
+  although I did find a paper by
+  [Thrun](http://scholar.google.ca/scholar?cluster=10518384657895134615&hl=en&as_sdt=0,5)
+  where he discusses decompiling, i.e., extracting rules from a neural
+  network.  Thrun uses a technique he calls validity-interval
+  analysis, basically propagating intervals for inputs and outputs
+  forwards and backwards through a network.
+
+**Softmax function:** Suppose $q_j$ is some set of outputs.  Then we
+  define the softmax function by:
+  
+  $$p_j \equiv \exp(q_j)/\sum_k \exp(q_j).$$
+  
+  
