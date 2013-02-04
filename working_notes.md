@@ -100,9 +100,13 @@ notes, and you certainly shouldn't rely on them!
   analysis, basically propagating intervals for inputs and outputs
   forwards and backwards through a network.
 
-**Softmax function:** Suppose $q_j$ is some set of outputs.  Then we
+**Softmax function:** Suppose $q_j$ is some set of values.  Then we
   define the softmax function by:
   
   $$p_j \equiv \exp(q_j)/\sum_k \exp(q_j).$$
   
-  
+  This is a probability distribution, which preserves the order of the
+  original values.  You can, for example, take the softmax in the
+  final layer of a neural network, taking the weighted sum of inputs
+  as the $q_j$ values, and then applying the softmax.  The output from
+  the network can then be interpreted as a probability distribution.
