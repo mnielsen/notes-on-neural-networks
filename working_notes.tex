@@ -20,10 +20,9 @@ outright errors in the notes.  I make no apology for this, nor do I
 have any interest in cleaning them up. As such, I don't advise reading
 the notes, and you certainly shouldn't rely on them!
 
-\textbf{Williams and Zipser (1989):}
-  \link{http://scholar.google.ca/scholar?cluster=1352799553544912946\&hl=en\&as\_sdt=0,5}{(link)}
-  Provides a gradient-based learning method for recurrent neural
-  networks.
+\textbf{Williams and Zipser (1989) - a gradient-based learning method
+  for recurrent neural networks:}
+\link{http://scholar.google.ca/scholar?cluster=1352799553544912946\&hl=en\&as\_sdt=0,5}{(link)}
   
   Makes the claim that feedforward networks don't have the "ability to
   store information for later use".  It'd be nice to understand what
@@ -123,6 +122,44 @@ layer of a neural network, taking the weighted sum of inputs as the
 $q_j$ values, and then applying the softmax.  The output from the
 network can then be interpreted as a probability distribution.
 
-Test.
+\textbf{Baldi and Hornik, 1989 - characterizes linear autoencoders}:
+\link{http://scholar.google.ca/scholar?cluster=11637720331851320383&hl=en&as_sdt=0,5}{(link)}
+We have a three-layer network, and the output is related to the input
+by $x \rightarrow ABx$, where $B$ describes the first layer of
+weights, and $A$ the second layer.  The goal is to find weight
+matrices $A$ and $B$ to minimize:
+\begin{eqnarray}
+\sum_x \|x-ABx\|^2.
+\end{eqnarray}
+The challenge is that the hidden layer has a \emph{smaller} number $h$
+of neurons than the input layer (which is, of course, of the same size
+as the output layer)\footnote{It's not quite clear to me what $h$
+  should parameterize.  I'll use it to parameterize the number of
+  dimensions in the vector space representing outputs from the hidden
+  units.  It seems likely that it'd be better to write $2^h$, but I'll
+  ignore that.}.  Let me try an attack on this without reading the
+paper.  That sum above is just:
+\begin{eqnarray}
+\mbox{tr}((I-AB)^2 \Sigma),
+\end{eqnarray}
+where $\Sigma \equiv \sum_x x x^T$.  To minimize this what we want to
+do is obvious (and easily proven): we'll choose $A$ and $B$ so that
+$AB$ is a $h$-dimensional projector onto the span of the eignenvectors
+of $\Sigma$ with the $h$ largest eigenvalues.  Let $P(\Sigma, h)$
+denote such a projector, so:
+\begin{eqnarray}
+AB = P(\Sigma, h).
+\end{eqnarray}
+We can easily characterize such $A$ and $B$.  $A$ should take the
+space $P(\Sigma, h)$ into the space spanned by the outputs from the
+hidden units, and $B$ should then undo that transformation.  There is
+an orthogonal freedom inbetween time, and a possible freedom in
+$P(\Sigma, h)$.  This completely characterizes $A$ and $B$.
+
+Summing up, in a linear neural network, \emph{a linear autoencoder is
+  just doing principal components analysis}.  So \emph{a non-linear
+  autoencoder can be thought of as a non-linear generalization of
+  PCA}.  That's a useful fact to remember.  Examination of the
+remainder of the paper suggests that these are the key facts.
 
 \end{document}
