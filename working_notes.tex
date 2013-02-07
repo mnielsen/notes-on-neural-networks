@@ -162,4 +162,25 @@ Summing up, in a linear neural network, \emph{a linear autoencoder is
   PCA}.  That's a useful fact to remember.  Examination of the
 remainder of the paper suggests that these are the key facts.
 
+\textbf{Thinking geometrically:} Suppose we're asked to tell the
+difference between pictures of a human face, and pictures of a
+giraffe.  We can represent the pictures as points $x$ in a very
+high-dimensional space.  And so our task is to divide that space up
+into two parts: one is classified as giraffe, the other as human face.
+(Maybe it should be three parts: the thrid part would be: neither face
+nor giraffe).  And so what we really want is algorithms for dividing
+up that space.  In some sense we're interested in understanding the
+space of all such algorithms. 
+
+It'd be interesting to lay out all the different curlicues to thinking
+in this way: the opportunities, and the pitfalls.  There are at least
+three broad approaches: (1) the \emph{pure geometric approach}, based
+on finding mathematical structures to divide the space; (2) the
+\emph{biological approach}, where we try to figure out how we do it;
+and (3) the \emph{kludge approach}, where we simply try lots of ideas,
+and pile them up on top of one another.  That's a pretty rough
+division, but seems like a good starting point for thought.  My bet is
+that progress comes from playing these ideas off against one another.
+
+
 \end{document}
