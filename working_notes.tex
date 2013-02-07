@@ -217,6 +217,43 @@ absolutely no advantage to doing deep learning with linear neurons.
 \textbf{Tenenbaum, de Silva and Langford, 2000:}
 \link{http://scholar.google.ca/scholar?cluster=14602426245887619907&hl=en&as_sdt=0,5}{(link)}
 There's a lot I can learn from this paper, so I'll take a lot of
-notes.
+notes.  Some of those notes I'll factor out.  
+
+They mention a technique called multidimensional scaling (MDS), which
+I hadn't heard of.  The general idea seems to be that we have a lot of
+items, and we know some ``dissimilarities'' between items.  The goal
+is to find a metric space embedding of those items so that the
+distances are roughly equal to the dissimilarities.
+
+A sample problem: we have a 4096-dimensional space, corresponding to
+64 by 64 pixel images.  A (nonlinear) subspace of this corresponds to
+images we'd recognize as faces.  How can we characterize this
+subspace?  
+
+This is just one possible mathematical formalization of the problem.
+In practice, things are more complex.  Our classification will be
+fuzzy.  We'll have all kinds of extra contextual information: maybe
+we've got an external hint; maybe we can see a nose; maybe the colour
+is wrong, but we see enough to suspect it's false colour.  All these
+kinds of things are clearly important in how we actually see.  In
+other words, we don't just have an algorithm for face detection.  We
+have a million related algorithms, and they all affect how well face
+detection works.  In some sense you don't solve one problem perfectly.
+You solve a network of problems imperfectly --- and then use those
+results to improve your performance on the original problem.  It's a
+kind of \emph{learning network}.  In a sense this is what a deep
+neural network does: it builds up gradually more complicated features.
+
+\textbf{There are $10^6$ optic nerves and $30,000$ auditory nerves:}
+I'm not quite sure what to make of this.  Presumably it means that we
+process something like $30$ times as much optical information as
+auditory.  I wonder how pixellated the information is?  
+
+\textbf{What happens when we augment the features, with PCA?}  Let's
+suppose we start off with 3 features, $x, y, z$.  Then we add $x^2$
+and $y^2$ as new features.  Certain subsets of the original space that
+weren't linearly approximable \emph{will be} in the new feature space.
+This seems like a potentially powerful technique.  What can it be used
+to do?  What are its limits?
 
 \end{document}
