@@ -182,5 +182,42 @@ and pile them up on top of one another.  That's a pretty rough
 division, but seems like a good starting point for thought.  My bet is
 that progress comes from playing these ideas off against one another.
 
+\textbf{Finding linear approximations (PCA):} It'll be useful to
+review PCA here.  Suppose we have a set of data points $x$ in some
+high-dimensional (vector) space.  Then we'd like to find a
+$k$-dimensional projector $P$ such that the following error function
+is minimized:
+\begin{eqnarray}
+\sum_x \| x-Px \|^2.
+\end{eqnarray}
+This error can be rewritten as $\mbox{tr}((I-P)\Sigma)$, where $\Sigma
+\equiv \sum_x x x^T$.  And so we simply choose $P$ to project onto the
+eigenvectors of $\Sigma$ with the $k$ largest eigenvalues.  The
+\emph{principal components} are the eigenvectors of $\Sigma$, in order
+of decreasing eigenvalue.  (There may, of course, be some ambiguity
+when $\Sigma$ is degenerate).
+
+Practically speaking, suppose we have a billion images, each of which
+can be regarded as a vector in a 100,000-dimensional space.  We can
+reduce to (say) a 100-dimensional space.  This gets rid of much of the
+irrelevant structure, and hopefully leaves a structure that is useful
+for comparing images.
+
+\textbf{We don't seem to have much theory of what it means to
+  generalize:} We have all these techniques based on
+parameter-fitting.  But we have a paucity of strong underlying
+theoretical ideas.
+
+\textbf{Q: What happens when we do deep learning with linear neurons?}
+It's equivalent to a single hidden layer whose size is just the
+minimal size of any of the original hidden layers.  So there is
+absolutely no advantage to doing deep learning with linear neurons.
+Put another way, for deep learning to help we \emph{must} be using
+nonlinear neurons.  That's an interesting fact.
+
+\textbf{Tenenbaum, de Silva and Langford, 2000:}
+\link{http://scholar.google.ca/scholar?cluster=14602426245887619907&hl=en&as_sdt=0,5}{(link)}
+There's a lot I can learn from this paper, so I'll take a lot of
+notes.
 
 \end{document}
