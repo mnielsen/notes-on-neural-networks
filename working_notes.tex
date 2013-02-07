@@ -254,6 +254,13 @@ the graph.  We then embed the graph in a space of the chosen
 dimensionality.  Nice!  Simple, probably pretty easy to implement, and
 I expect it lets us find a lot of structure.
 
+It's worth thinking about what the input and output are.  The input to
+Iso-map is just a data set --- maybe it's a set of images of a face,
+maybe it's a set of words, whatever.  This data lives in a very
+high-dimensional space.  What we do is we find an embedding in a much
+lower dimensional space --- say, 2-dimensional.  In other words, we're
+constructing new features, based on the original features.
+
 \textbf{There are $10^6$ optic nerves and $30,000$ auditory nerves:}
 I'm not quite sure what to make of this.  Presumably it means that we
 process something like $30$ times as much optical information as
