@@ -244,6 +244,16 @@ results to improve your performance on the original problem.  It's a
 kind of \emph{learning network}.  In a sense this is what a deep
 neural network does: it builds up gradually more complicated features.
 
+The algorithm they describe is very simple.  Very roughly (this
+certainly contains mistakes): the idea seems to be to take all your
+data points and to compute distances between them.  We assume that
+when the distances are small, the points are neighbours.  Construct a
+graph in which neighbouring points are connected.  Then geodesic
+distance is found (approximated) by finding the shortest distance in
+the graph.  We then embed the graph in a space of the chosen
+dimensionality.  Nice!  Simple, probably pretty easy to implement, and
+I expect it lets us find a lot of structure.
+
 \textbf{There are $10^6$ optic nerves and $30,000$ auditory nerves:}
 I'm not quite sure what to make of this.  Presumably it means that we
 process something like $30$ times as much optical information as
