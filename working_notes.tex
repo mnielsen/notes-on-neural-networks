@@ -273,4 +273,43 @@ weren't linearly approximable \emph{will be} in the new feature space.
 This seems like a potentially powerful technique.  What can it be used
 to do?  What are its limits?
 
+\textbf{Tenenbaum, Kemp, Griffiths, and Goodman, 2011:}
+\link{http://scholar.google.ca/scholar?cluster=2667398573353002097&hl=en&as_sdt=0,5}{(link)}
+A review of a particular approach to inductive learning.  They want to
+combine Bayesian learning with complex ways of representing knowledge.
+
+Claims that there is strong evidence that children can learn to
+generalize their use of words from just a few examples.  This suggests
+that there must be some pretty clever underlying patterns to how we
+generalize.  ``A massive mismatch looms between information coming in
+through our senses and the outputs of cognition''.  
+
+Claims that we humans do reason (implicitly) in Bayesian ways about a
+number of things.  Mostly omits the evidence that we \emph{don't} in
+some important ways.  This omission bugs me.  They \emph{do} mention
+the fact that our conscious assessements of probability tend to be
+terrible, which is pleasing.  With that said, I'm not certain about
+this --- I just have the strong impression that there are well-known
+instances where we certainly don't reason in a Bayesian way.  It'd be
+good to have references.
+
+``The biggest remaining obstacle is to understand how structured
+symbolic knowledge can be represented in neural circuits.''
+Interesting.  I've often wondered exactly this.  They make the
+followup comment: ``Connectionist models sidestep these challenges by
+denying that brains actually encode such rich knowledge''.  That seems
+too strong to me, but there is some truth to it: the connectionists
+seem less interested than one might suppose in this question, perhaps
+believing that its solution should be deferred.
+
+How would one go about solving this problem?  Actually, what would a
+solution / better statement of the problem even look like?  Maybe we
+could encode entry-relationships?  In particular, let us suppose we
+want to encode $X Y Z$ where $X$ and $Z$ are entities, and $Y$ is the
+relationship.  One way of encoding this would be to have a neural
+network with nodes for each entity and for each relationship.  We'd
+try to design the network so that the only relationships which are
+active would be those which are true, given the active entities.
+
+
 \end{document}
