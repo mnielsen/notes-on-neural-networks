@@ -323,9 +323,39 @@ network with nodes for each entity and for each relationship.  We'd
 try to design the network so that the only relationships which are
 active would be those which are true, given the active entities.
 
-\textbf{Olshausen and Field (1996):} 
+\textbf{Olshausen and Field (1996):} Presents a method for finding
+low-complexity representations of natural images, in terms of atomic
+images --- which they call ``sparse codes'' --- which are localized,
+oriented, and scale-sensitive.  These are found using an unsupervised
+learning algorithm with a bias toward good quality, low-complexity
+representations.  The codes seem to be quite similar to the receptive
+fields found in the human visual system.
 
-They want to decompose an image as:
+The \emph{receptive field} for a cell in the retina is the volume of
+space (roughly, a cone) which can stimulate that cell to fire.  Nearby
+cells can have overlapping (or nearby) receptive fields.  Other cells
+in the visual cortex also have receptive fields, but they may be more
+complex, since the light has already been filtered through one or more
+levels of processing.  
+
+The paper claims that the receptive fields in the primary visual
+cortex are: (a) spatially localized; (b) oriented; and (c) can
+distinguish structure at different scales.
+
+There is then a question: so what are those receptive fields?  In a
+way, we can view this as being the question: to what type of images do
+different cells in our primary visual cortex respond?  Answering that
+question seems like a good start for understanding any higher-level
+image processing.  It's the question: what are the atoms of image
+processing?  Or perhaps a better way is to think of them as the
+molecules of image processing, since they're one level up from the
+pixel level.
+
+They develop an unsupervised learning algorithm which, trained on
+natural data, can find receptive fields that are spatially localized,
+oriented, and can distinguish structure at different scales.
+
+Olshausen and Field want to decompose an image as:
 \begin{eqnarray}
   I(x,y) = \sum_j a_j \phi_j(x,y).
 \end{eqnarray}
@@ -334,6 +364,34 @@ the space of images.  They want to choose the $\phi_j$ which ``results
 in the coefficient values being as statistically independent as
 possible over an ensemble of natural images''.  In some sense, the
 different $a_j$ would be ``telling us different things'' about the
-image.
+image.  They also want the coefficient values to be sparse, favouring
+simple representations over more complex.
+
+O \& F try to search for a suitable set of $\phi_j$s by introducing an
+error function:
+\begin{eqnarray}
+  E = -\mbox{[preserve information]}-\lambda\mbox{[sparseness of } a_j {]}.
+\end{eqnarray}
+This error is \emph{for a single image}.  The first term is just the
+$l_2$ error, i.e., (minus) the quadratic distance between the image
+and its representation.  The sparseness term is just a nonlinear
+function of the $a_j$ coefficients, quantifying how sparse they are.
+
+The idea is to do online learning with this error function, presenting
+it with natural images, and gradually minimizing the error.  (I see
+later in the article that it was actually batch learning using
+conjugate gradient descent.  It appears that some kind of average
+error is being computed.)  The result will be an overcomplete basis
+set that favours sparse decompositions of images.
+
+The ``sparsification'' idea is a very interesting one.  Basically,
+it's a way of trying to force a kind of Occam's razor into the system.
+It's a bit like autoencoders, forcing a simple explanation of complex
+data.
+
+O \& F note that wavelets have been used to find sparse codes
+previously.
+
+
 
 \end{document}
