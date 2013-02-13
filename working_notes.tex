@@ -26,49 +26,50 @@ networks?  And then there is the broader question: how to build a
 mind?  My reading will address both questions.
 
 \textbf{Recurrent neural networks (RNN):} According to Wikipedia, RNNs
-have achieved the best results to date on handwriting recognition.  A
-core question is obviously: what are the respective advantages of RNNs
-and feedforward networks?  Are there important problems for which one
-or the other is particularly preferable?  Why?  What I've read about
-these questions seems opaque.
+have achieved the best results to date on handwriting recognition.  An
+obvious question is: what are the respective advantages of RNNs and
+feedforward networks?  Are there important problems for which one or
+the other is preferable?  Why?  What I've read about these questions
+is opaque.
 
 \textbf{Williams and Zipser (1989) - a gradient-based learning method
   for recurrent neural networks:}
 \link{http://scholar.google.ca/scholar?cluster=1352799553544912946\&hl=en\&as\_sdt=0,5}{(link)}
   
-  Makes the claim that feedforward networks don't have the "ability to
-  store information for later use".  It'd be nice to understand what
-  that means.  Obviously there's a trivial sense in which feedforward
-  networks can store information based on training data.  Claims that
-  backprop requires lots of memory when used with large amounts of
-  training data.  I don't understand this claim.
+Claims that feedforward networks don't have the "ability to store
+information for later use".  It'd be nice to understand what that
+means.  Obviously there's a trivial sense in which feedforward
+networks can store information based on training data.  
+
+Claims that backprop requires lots of memory when used with large
+amounts of training data.  I don't understand this claim.
   
-  Their model of recurrent neural networks is interesting.  Basically,
-  we have a set of neurons, each with an output.  And we have a set of
-  inputs to the network.  There is a weight between every pair of
-  neurons, and from each input to each neuron.  To compute a neuron's
-  output at time $t+1$ we compute the weighted sum of the inputs and
-  the outputs at time $t$, and apply the appropriate nonlinear
-  function (sigmoid, or whatever).  Note that in order for this
-  description to make sense we must specify the behaviour of the
-  external inputs over time.  We can incorporate a bias by having an
-  external input which is always $1$.
+Their model of recurrent neural networks is interesting.  Basically,
+we have a set of neurons, each with an output.  And we have a set of
+inputs to the network.  There is a weight between every pair of
+neurons, and from each input to each neuron.  To compute a neuron's
+output at time $t+1$ we compute the weighted sum of the inputs and the
+outputs at time $t$, and apply the appropriate nonlinear function
+(sigmoid, or whatever).  Note that in order for this description to
+make sense we must specify the behaviour of the external inputs over
+time.  We can incorporate a bias by having an external input which is
+always $1$.
   
-  So a recurrent neural network is just like a feedforward network,
-  with a weight constraint: the weights in each layer are the same,
-  over and over again.  Also, the inputs must be input to every layer
-  in the network.
+So a recurrent neural network is just like a feedforward network, with
+a weight constraint: the weights in each layer are the same, over and
+over again.  Also, the inputs must be input to every layer in the
+network.
   
-  Williams and Zipser take as their supervised training task the goal
-  of getting neuron outputs to match certain desired training values
-  at certain times.  For instance, you could define a two-neuron
-  network that will \emph{eventually} produce the XOR of the inputs.
+Williams and Zipser take as their supervised training task the goal of
+getting neuron outputs to match certain desired training values at
+certain times.  For instance, you could define a two-neuron network
+that will \emph{eventually} produce the XOR of the inputs.
   
-  They define the total error to be the sum over squares of the errors
-  in individual neuron outputs.  And we can then do ordinary gradient
-  descent with that error function.  They derive a simple dynamical
-  system to describe how to improve the weights in the network using
-  gradient descent.
+They define the total error to be the sum over squares of the errors
+in individual neuron outputs.  And we can then do ordinary gradient
+descent with that error function.  They derive a simple dynamical
+system to describe how to improve the weights in the network using
+gradient descent.
 
   The above algorithm assumes that the weights in the network remain
   constant for all time.  Williams and Zipser then modify the learning
@@ -107,16 +108,15 @@ these questions seems opaque.
   any given time step, computing the gradient, and updating the
   weights appropriately.
 
-\textbf{Compiling to neural networks:} One idea that may be
-  interesting is to create compilers which would translate a program
-  written in a conventional programming language into a neural
-  network.  I'd be especially interested in seeing how this works for
-  AI workhorses such as Prolog.  What could we learn from such a
-  procedure?  (1) Perhaps we could figure out how to link up multiple
-  neural modules, with one or more of the modules coming from the
-  compiler? (2) Maybe we could use a learning technique to further
-  improve the performance of the compiled network.  Googling doesn't
-  reveal a whole lot, although I did find a paper by
+  \textbf{Compiling to neural networks:} Can we create compilers which
+  translate programs written in a conventional programming language
+  into a neural network?  I'd be especially interested in seeing how
+  this works for AI workhorses such as Prolog.  What could we learn
+  from such a procedure?  (1) Perhaps we could figure out how to link
+  up multiple neural modules, with one or more of the modules coming
+  from the compiler? (2) Maybe we could use a learning technique to
+  further improve the performance of the compiled network.  Googling
+  doesn't reveal a whole lot, although I did find a paper by
   \link{http://scholar.google.ca/scholar?cluster=10518384657895134615\&hl=en\&as\_sdt=0,5}{Thrun}
   where he discusses decompiling, i.e., extracting rules from a neural
   network.  Thrun uses a technique he calls validity-interval
