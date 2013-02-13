@@ -419,7 +419,14 @@ Let's suppose we wanted to train an RBM with a set of images.  The
 images would correspond to the visible units, while the hidden units
 would be feature detectors.  The idea is to adjust the weights and
 biases so that training images have a high probability, i.e., a low
-energy.  There is a simple learning rule to do this.
+energy.  
+
+In a little more detail, suppose we input a training image.  Then we
+can stochastically pick a corresponding value for the hidden units.
+Now, feed that back, and stochastically choose a value for the image.
+In an ideal world, we'd recover the original image.  We modify the
+weights in such a way as to improve the fidelity of the recovered
+image.
 
 \textbf{Hinton and Salakhutdinov (2006):}
 \link{http://scholar.google.ca/scholar?cluster=15344645275208957628}{(link)}
@@ -437,5 +444,30 @@ of RBMs.  We then use backpropagation to fine-tune the whole thing.
 
 \emph{Question:} Might we do better using something apart from the
 $\sigma$ function?
+
+\emph{Question:} Could we try doing gradient descent on the squashing
+function as well?  For instance, we could use a linear combination $p
+\sigma_1+(1-p) \sigma_2$ of two squashing functions, and do gradient
+descent on the value of $p$ to see what is the best possible squashing
+function.
+
+\textbf{Phenomenology and the building of models:} There is something
+slightly worrying about all of this model-building.  Much of what is
+going on seems like wandering around, trying to build better and
+better models, without ever understanding what is really going on.
+Surely, we must understand the principles underlying all this?  Isn't
+that absolutely necessary if we're ever to get to an understanding of
+intelligence?
+
+This point of view has been put forcefully.  Minsky and Papert.  David
+Deutsch.
+
+This point of view is very tempting.  But it's not clear that they're
+right. Think of early botany.  It is easy to sneer at the botanists,
+to claim that they were merely stamp-collecting.  But that is to miss
+the point.  Perhaps the greatest stamp-collector of all was Charles
+Darwin.  It was in considerable part Darwin's familiarity with the
+variety of life that enabled him to discover fundamental principles
+underlying life.
 
 \end{document}
