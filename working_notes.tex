@@ -15,10 +15,10 @@
 \textbf{Working notes, by Michael Nielsen:} These are rough working
 notes, written as part of my study of neural networks.  Note that they
 really are \emph{rough}, and I've made no attempt to clean them up.
-There are many misunderstandings, misinterpretations, omissions, and
-outright errors.  I make no apology for this, nor do I have any
-interest in cleaning them up.  As such, I don't advise others to read
-the notes, and certainly not to rely on them!
+There contain misunderstandings, misinterpretations, omissions, and
+outright errors.  I make no apology for this, nor do I plan to clean
+them up.  As such, I don't advise others to read the notes, and
+certainly not to rely on them!
 
 \textbf{Core questions:} There is a practical, narrow question: what
 are the most significant results about deep learning and neural
@@ -392,6 +392,34 @@ data.
 O \& F note that wavelets have been used to find sparse codes
 previously.
 
+\textbf{Restricted Boltzmann machines:} The idea is not to learn a
+function, but rather to learn a probability distribution.  There are
+two layers of neurons: a visible layer, and a hidden layer.  All
+visible units are connected to all hidden units.  The energy of a
+given configuration is just:
+\begin{eqnarray}
+  E(v, h) = -\sum_i a_i v_i-\sum_j b_j h_j-\sum_{ij} w_{ij} v_i h_j \\
+  & = & -a \cdot v-b\cdot h -v^T W h,
+\end{eqnarray}
+where $a$ are the biases for the visible units, $b$ are the biases for
+the hidden units, and $W$ is the weight matrix.  The distribution is
+just the standard Boltzmann distribution, at some fixed temperature.
+Apparently it can be shown that:
+\begin{eqnarray}
+  p(v_i = 1 | h) = \sigma( a_i + (Wh)i),
+\end{eqnarray}
+where $\sigma$ is the usual sigmoid function.  (I'll bet this is easy
+to show, just by summing out all the other visible units.)
+Furthermore, the $v_i$ are independent of one another, given $h$.
+This too would be easy to show --- it'll be a straightforward
+consequence of the bipartite nature of the graph. So we can compute
+the probability of $v$, given $h$, simply by multiplying sigmoids.
+
+Let's suppose we wanted to train an RBM with a set of images.  The
+images would correspond to the visible units, while the hidden units
+would be feature detectors.  The idea is to adjust the weights and
+biases so that training images have a high probability, i.e., a low
+energy.  There is a simple learning rule to do this.
 
 
 \end{document}
