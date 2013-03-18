@@ -519,7 +519,8 @@ important hyper-parameter.  ``If there is only time to optimize one
 hyper-parameter and one uses stochastic gradient descent, then this is
 the hyper-parameter that is worth tuning.''
 
-\textbf{LeCun (1998):} 
+\textbf{LeCun (1998):}
+\link{http://yann.lecun.com/exdb/publis/index.html\#lecun-98}{link}
 
 Reviews the classic two-part architecture: a feature extraction
 module, followed by a trainable classifier module.  Points out that
@@ -527,12 +528,76 @@ the real goal is to shunt as much as possible out of the feature
 extraction module and into the classifier module, since the first
 requires hand-engineering, while the second is (much more) automated.
 
-\textbf{Bengio (2007):}
+Makes the remarkable claim that the difference in error between test
+and training set scales as $(h/N)^\alpha$, where $h$ is a measure of
+how complex a classifier we're using, $N$ is the number of training
+examples, and $0.5 < \alpha < 1$.  In other words, the error grows as
+the complexity of the machine grows.  And it shrinks as the number of
+training samples grows.  I wonder why this is the case?  Could we come
+up with a model that more or less proves that this is the case?  Maybe
+a renormalization argument?
+
+\textbf{On regularization:} I'd like to understand \emph{why} we
+regularize.  Certainly, regularization results in solutions with a
+small norm.  But why do we not what solutions with a larger norm?
+Will something bad happen to us if we allow such solutions?
+
+The standard argument: what's bad is that overfitting can occur.  And
+thus regularization helps reduce overfitting.  It'd be nice to have an
+example where overfitting actually occurs.  It's really not clear that
+there \emph{should} be a problem with overfitting.  In fact, neural
+networks eventually become virtually invariant under rescaling of
+their weights and biases.  So it's really not clear that it should
+help.
+
+Returning to regularization, here's the standard story people tell to
+explain why they regularize.  The story is that they want to avoid
+high-complexity solutions, in order to avoid over-fitting.  Solutions
+with smaller norms are in some sense lower complexity.  And therefore
+it makes sense to look for solutions with smaller norm.  One way of
+doing this is to penalize solutions with larger norms.  Thus, we
+should add a term to the cost which penalizes such solutions.
+
+Now, this is just a story.  It's not in any sense a sharp
+justification.  In fact, the impact of regularization is still being
+understood.  Researchers write papers where they try different
+approaches to regularization, compare them to see which works better,
+and try to understand why different approaches work the way the day.
+
+When can overfitting occur?  Typically, when there are more parameters
+in the model than there is training data.  What's odd about this is
+that regularization doesn't really help all that much with this
+problem.  It just restricts one degee of freedom.
+
+Many different types of regularization possible.  I will just use the
+most standard and obvious, which is quadratic.  Anything which
+penalizes high-complexity solutions is okay.  It's really a research
+topic.
+
+Empirically: I find that regularization seems to help.  When we
+regularize I get higher accuracies, by quite a bit.  I don't
+understand why that is.
+
+Maybe I'm already overfitting, and regularization is helping reduce
+that problem.  It's possible: I have 20,000 or so parameters in my
+model.
+
+An example of overfitting: I'll bet I can it to overfit when we use
+just 50 training examples.  And I can probably more or less prove this
+using cross-validation.
+
+Look at LeCun \emph{et al}'s results: do they regularize, or not?
+
+\textbf{Bengio (2007):} \link{http://arxiv.org/pdf/1206.5533v2.pdf}{link}
 
 \textbf{Ranzato (2007):}
 
 \textbf{Bottou (2012):}
 \link{http://leon.bottou.org/papers/bottou-tricks-2012}{(link)}
+
+
+\textbf{To do:} Contrastive divergence. LeCun 1998 ``Efficient
+BackProp''.  Dropout.  Maxout. Domingos CACM12.
 
 \textbf{On tricks:} Much of what seems to be going on is the discovery
 of tricks (of various generality) which can be used to improve pattern
