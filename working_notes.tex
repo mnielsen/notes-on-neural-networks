@@ -537,6 +537,20 @@ training samples grows.  I wonder why this is the case?  Could we come
 up with a model that more or less proves that this is the case?  Maybe
 a renormalization argument?
 
+``The fact that local minima do not seem to be a problem for
+multi-layer neural networks is somewhat of a theoretical mystery'':
+This is strange.  Maybe it's the case that it's very hard to fall down
+into such local minima in high dimensions? I've personally had
+problems with very simple training data, but as soon as the training
+data and network become at all complex, those problems seem to vanish.
+This presumably means that ``most'' local minima are pretty darn good.
+
+The \emph{segmentation} problem: the problem of cutting up a string of
+characters.  Notes that a nice heuristic is to try lots and lots of
+different cuts, and for each possible cut to score the cut by using
+the individual character classifier: if that classifier seems to be
+working well, then chances are that you have a good cut.
+
 \textbf{On regularization:} I'd like to understand \emph{why} we
 regularize.  Certainly, regularization results in solutions with a
 small norm.  But why do we not what solutions with a larger norm?
@@ -580,7 +594,7 @@ understand why that is.
 
 Maybe I'm already overfitting, and regularization is helping reduce
 that problem.  It's possible: I have 20,000 or so parameters in my
-model.
+model.  It'd be nice to see if this is the case.
 
 An example of overfitting: I'll bet I can it to overfit when we use
 just 50 training examples.  And I can probably more or less prove this
@@ -596,8 +610,10 @@ Look at LeCun \emph{et al}'s results: do they regularize, or not?
 \link{http://leon.bottou.org/papers/bottou-tricks-2012}{(link)}
 
 
-\textbf{To do:} Contrastive divergence. LeCun 1998 ``Efficient
-BackProp''.  Dropout.  Maxout. Domingos CACM12.
+\textbf{To do:} Contrastive divergence
+(http://learning.cs.toronto.edu/~hinton/absps/cdmiguel.pdf and
+http://www.cs.utoronto.ca/~hinton/absps/nccd.pdf ). LeCun 1998
+``Efficient BackProp''.  Dropout.  Maxout. Domingos CACM12.
 
 \textbf{On tricks:} Much of what seems to be going on is the discovery
 of tricks (of various generality) which can be used to improve pattern
