@@ -551,6 +551,22 @@ different cuts, and for each possible cut to score the cut by using
 the individual character classifier: if that classifier seems to be
 working well, then chances are that you have a good cut.
 
+The authors note that existing systems are based on hand-crafted
+feature extractors, but that they will not use hand-crafted features.
+
+MNIST: constructured by combining NIST Special database 3 (SD-3) and
+Special Database 1 (SD-1).  Apparently, NIST designated SD-3 as a
+training set, and SD-1 as a test set.  But the two are actually very
+different from on enaother.  SD-3 is a clean data set, taken from
+Census Bureau employees, while SD-1 is not so good, being taken from
+high-school students.  They describe some details of how MNIST was
+constructed.  I'll review a few particularly striking facts.  First,
+each character is size normalized, while preserving aspect ratio, and
+centred.  There was also anti-aliasing going on.  So this can all be
+regarded as pre-processing of features.  The database was prepared in
+three forms.  One was the form I know it.  A second was a deslanted
+form.  The third reduced the image resolution.
+
 \textbf{On regularization:} I'd like to understand \emph{why} we
 regularize.  Certainly, regularization results in solutions with a
 small norm.  But why do we not what solutions with a larger norm?
@@ -601,6 +617,14 @@ just 50 training examples.  And I can probably more or less prove this
 using cross-validation.
 
 Look at LeCun \emph{et al}'s results: do they regularize, or not?
+
+\textbf{Krizhevsky (2012):}
+\link{http://www.cs.toronto.edu/~hinton/absps/imagenet.pdf}{link}
+
+\textbf{Le (2012):} \link{https://plus.google.com/u/0/+ResearchatGoogle/posts/EMyhnBetd2F}{link}
+
+\textbf{Seide (2011):}
+\link{http://research.microsoft.com/apps/pubs/default.aspx?id=153169}{link}
 
 \textbf{Bengio (2007):} \link{http://arxiv.org/pdf/1206.5533v2.pdf}{link}
 
