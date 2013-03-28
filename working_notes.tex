@@ -659,7 +659,28 @@ tendency to learn random things.  E.g., an SVM (without kernel) may
 have high bias if the data is nowhere close to linearly separable.
 Cross-validation can itself start to overfit.
 
-CCC
+Intuition fails in high dimensions: I don't think this is quite right.
+It would be better to say that it needs to be replaced in high
+dimensions.
+
+Theoretical guarantees are not what they seem: Points out that there
+are effectively guarantees that can (with caveats) be put on
+induction.  Very interesting.  It'd be good to understand this in
+conjunction with the no-free lunch theorems.
+
+Feature engineering is the key: Points out that the ``machine
+learning'' part of a machine learning project may be tiny.  More time
+spent gathering data, cleaning it, and figuring out good input
+features.
+
+More data beats a cleverer algorithm: ``As a rule, it pays to try the
+simplest learners first''.  ``... the organizations that make the most
+of machine learning are those that have in place an infrastructure
+that makes experimenting with many different learners, data sources
+and learning problems easy and effcient, and where there is a close
+collaboration between machine learning experts and application domain
+ones.''
+
 
 Representable does not imply learnable: in other words, don't focus
 all your attention on one representation (say, neural nets, or SVMs)
@@ -690,6 +711,9 @@ interpreting the results of machine learning algorithsm.
 http://www.cs.utoronto.ca/~hinton/absps/nccd.pdf ). LeCun 1998
 ``Efficient BackProp''.  Dropout.  Maxout. Domingos CACM12.  Andrew
 Ng's 1997 paper ``Preventing overfitting of cross-validation data''.
+Blumer \emph{et al} with guarantees on induction:
+(http://scholar.google.ca/scholar?cluster=11895938102761137877\&hl=en\&as\_sdt=0,5).
+Would be good to understand this in conjunction with no free lunch.
 
 \textbf{On tricks:} Much of what seems to be going on is the discovery
 of tricks (of various generality) which can be used to improve pattern
