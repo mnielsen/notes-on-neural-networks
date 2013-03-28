@@ -476,40 +476,46 @@ earlier work provided such mappings.  Perhaps I should look closer.
 
 \textbf{Bengio (2012):} \link{http://arxiv.org/abs/1206.5533}{(link)}
 
-Notes that many of the recommendations haven't been proven in any way,
-they're heuristics that have emerged out of experimentation.  ``A good
+Notes that many of the recommendations haven't been proved, they're
+heuristics that have emerged out of experimentation.  ``A good
 indication of the need for such validation is that different
 researchers and research groups do not always agree on the practice of
 training neural networks''.
 
 Claims that the optimal learning rate is usually close to the largest
-learning rate that does not cause divergence of the training criterion
-(i.e., the error).  Heuristic: start with a large learning rate, and
-if the cost function increases, start again with a training criterion
-that is three times smaller.
+learning rate that does not cause divergence of the cost function.
+Heuristic: start with a large learning rate, and if the cost function
+increases, start again with a training criterion that is three times
+smaller.
 
-This can probably (?) be automated.  Basically, keep track of the cost
-from increment to increment.  If the cost got \emph{larger}, then
-decrease the training rate by a factor two, say.  If the cost got
+This can be automated by keeping track of the cost from epoch to
+epoch.  If the cost got \emph{larger} during an epoch, then decrease
+the training rate by a factor two, say.  If the cost got
 \emph{smaller}, then increase the training rate by a factor of 1.1,
 say.  How well will that work?  I worry that we'll end up with a
 situation where we're mostly going back and forth between the training
 rate being too high, and too low, with not enough time to really learn
 anything.
 
-Larger mini-batches allow a modest increase in learning rate.
+Larger mini-batches allow a modest increase in learning rate.  I don't
+understand the details of this.  It'd be nice to have some heuristics.
+Large mini-batches will certainly reduce stochastic error from the
+sampling.  Is that what's going on?  Or is there some other reason?
 
 ``Because the gradient direction is not quite the right direction of
 descent, there is no point in spending a lot of computation to
 estimate it precisely for gradient descent.''  In other words, do
 frequent rapid estimates rather than slow accurate computations.
 
-An \emph{epoch}: a sweep through the entire training set.  It seems to
-me that it'd be helpful to keep track of training examples with
-markedly different gradients.
+It seems to me that it'd be helpful to keep track of training examples
+with markedly different gradients.  Those are ones which we could
+learn a lot from.  There's an idea here, which is to \emph{identify
+  outliers} using the gradient.  We should oversample from the
+outliers.  I'll bet that improves performance, if the right
+oversampling rate is chosen.  I've explored this idea further below.
 
-Bengio confirms that for large data sets, stochastic gradient descent
-is pretty much non-optional.
+Bengio confirms that for large data sets, mini-batch stochastic
+gradient descent is pretty much non-optional.
 
 The use of validation data to train hyper-learners, which learn
 hyper-parameters for a learning algorithm.
@@ -517,7 +523,25 @@ hyper-parameters for a learning algorithm.
 Comments that the initial learning rate is often the single most
 important hyper-parameter.  ``If there is only time to optimize one
 hyper-parameter and one uses stochastic gradient descent, then this is
-the hyper-parameter that is worth tuning.''
+the hyper-parameter that is worth tuning.''  Also comments that
+there's often little benefit to doing anything other than keeping the
+learning rate constant.  When doing otherwise, Bengio suggests a
+strategy of keeping the learning rate constant for the first $\tau$
+steps, and then decreasing it as $1/ t$, where $t$ is the number of
+steps.  Note that this strategy is not the same as the (exponential)
+automated strategy I describe above.  Suggests setting $\tau$ by
+waiting until the cost goes up.  Also suggests setting multiple values
+for the schedule, and seeing how they compare.
+
+Mini-batch size: between 1 and a few hundreds.  Typical value of 32.
+Notes that this mostly affects computation time, not the final value
+of the cost.
+
+Number of epochs: Watch the validation error, and stop once we're
+beginning to overfit.
+
+Momentum: smooth out gradient by taking an average of recent
+gradients.
 
 \textbf{LeCun (1998):}
 \link{http://yann.lecun.com/exdb/publis/index.html\#lecun-98}{link}
@@ -643,6 +667,27 @@ http://www.cs.utoronto.ca/~hinton/absps/nccd.pdf ). LeCun 1998
 of tricks (of various generality) which can be used to improve pattern
 recognition performance.  There are some general heuristics: \emph{use
   symmetry} is obviously one.
+
+\textbf{Idea: oversampling of outliers:} This is done using online
+training.  The idea is to gradually identify outliers, and to up the
+probability with which they are sampled.  What's a natural way of
+doing this?  What's going on is that we have costs for a large number
+of different training examples.  And we'd like to spend more time on
+those examples where we do worse.  
+
+Idea: We could try using the cost as an inverted energy.  SO we tend
+to spend more time in states which are high-cost / low-energy.  The
+idea is to associate an energy to each training example: $E = E(x)$.
+Then we sample the training examples according to the Boltzmann
+distribution.  For each sample we apply backprop to update the
+weights.  So we get a new energy.  Then we sample again.  And so on.
+We start at a high temperature, which means we spend about the same
+amount of time on all training data.  But then we gradually lower the
+temperature, so we're spending more time on outliers.  The problem
+with this approach is that it requires us to calculate lots of
+probabilities.  However, it might be possible to use an expander
+construction to do some kind of local sampling which would, however,
+remain rapidly mixing.
 
 \section{Questions}
 
