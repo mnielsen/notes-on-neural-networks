@@ -642,6 +642,32 @@ using cross-validation.
 
 Look at LeCun \emph{et al}'s results: do they regularize, or not?
 
+\textbf{Domingos (2012):} \link{http://scholar.google.ca/scholar?cluster=4404716649035182981\&hl=en\&as\_sdt=0,5}{link}
+
+He points out that we don't have access to the function we really want
+to optimize, unlike in most optimization problems.  Instead we use
+training error as a proxy for test error.  That's a very interesting
+and strange situation.
+
+``Learners combine knowledge with data to grow programs.''
+
+Overfitting has many faces: ``the bugbear of machine learning''; ``it
+comes in many forms that are not immediately obvious''.
+Generalization error can be decomposed into bias and variance.  Bias
+is the tendency to keep learn the same wrong things.  Variance is the
+tendency to learn random things.  E.g., an SVM (without kernel) may
+have high bias if the data is nowhere close to linearly separable.
+Cross-validation can itself start to overfit.
+
+CCC
+
+Representable does not imply learnable: in other words, don't focus
+all your attention on one representation (say, neural nets, or SVMs)
+merely because there is some kind of universality theorem for them.
+
+Correlation does not imply causation: Keep it in mind when
+interpreting the results of machine learning algorithsm.
+
 \textbf{Krizhevsky (2012):}
 \link{http://www.cs.toronto.edu/~hinton/absps/imagenet.pdf}{link}
 
@@ -657,11 +683,13 @@ Look at LeCun \emph{et al}'s results: do they regularize, or not?
 \textbf{Bottou (2012):}
 \link{http://leon.bottou.org/papers/bottou-tricks-2012}{(link)}
 
+\textbf{Wolpert (XXX):} No free lunch.
 
 \textbf{To do:} Contrastive divergence
 (http://learning.cs.toronto.edu/~hinton/absps/cdmiguel.pdf and
 http://www.cs.utoronto.ca/~hinton/absps/nccd.pdf ). LeCun 1998
-``Efficient BackProp''.  Dropout.  Maxout. Domingos CACM12.
+``Efficient BackProp''.  Dropout.  Maxout. Domingos CACM12.  Andrew
+Ng's 1997 paper ``Preventing overfitting of cross-validation data''.
 
 \textbf{On tricks:} Much of what seems to be going on is the discovery
 of tricks (of various generality) which can be used to improve pattern
