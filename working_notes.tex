@@ -14,16 +14,15 @@
 
 \textbf{Working notes, by Michael Nielsen:} These are rough working
 notes, written as part of my study of neural networks.  Note that they
-really are \emph{rough}, and I've made no attempt to clean them up.
-There contain misunderstandings, misinterpretations, omissions, and
-outright errors.  I make no apology for this, nor do I plan to clean
-them up.  As such, I don't advise others to read the notes, and
-certainly not to rely on them!
+really are \emph{rough}, and I've made no attempt to clean them up,
+nor do I plan to.  They contain misunderstandings, misinterpretations,
+omissions, and outright errors.  As such, I don't advise others to
+read the notes, and certainly not to rely on them!
 
 \textbf{Core questions:} There is a practical, narrow question: what
 are the most significant results about deep learning and neural
-networks?  And then there is the broader question: how to build a
-mind?  My reading will address both questions.
+networks?  And then there is the broader question: how to build an
+artificial intelligence?  My reading will address both questions.
 
 \textbf{Recurrent neural networks (RNN):} According to Wikipedia, RNNs
 have achieved the best results to date on handwriting recognition.  An
@@ -42,8 +41,14 @@ means.  Obviously there's a trivial sense in which feedforward
 networks can store information based on training data.  
 
 Claims that backprop requires lots of memory when used with large
-amounts of training data.  I don't understand this claim.
-  
+amounts of training data.  I don't believe this, except in the trivial
+sense that it may take a lot of memory to store all the training data.
+Otherwise, we can compute gradients
+training-instance-by-training-instance, and sum the results, which is
+not especially memory intensive.  (Of course, one may have a huge
+network which requires a lot of memory to story.  But that's a
+separate issue.)
+
 Their model of recurrent neural networks is interesting.  Basically,
 we have a set of neurons, each with an output.  And we have a set of
 inputs to the network.  There is a weight between every pair of
@@ -71,63 +76,62 @@ descent with that error function.  They derive a simple dynamical
 system to describe how to improve the weights in the network using
 gradient descent.
 
-  The above algorithm assumes that the weights in the network remain
-  constant for all time.  Williams and Zipser then modify the learning
-  algorithm, allowing it to change the weights at each step.  The idea
-  is simply to compute the total error at any \emph{given} time, and then
-  to use gradient descent with that error function to update the
-  weights.  (Similar to online learning in feedforward networks.)
+The above algorithm assumes that the weights in the network remain
+constant for all time.  Williams and Zipser then modify the learning
+algorithm, allowing it to change the weights at each step.  The idea
+is simply to compute the total error at any \emph{given} time, and
+then to use gradient descent with that error function to update the
+weights.  (Similar to online learning in feedforward networks.)
   
-  Williams and Zipser describe a method of \emph{teacher-forcing},
-  modifying the neural network by replacing the output of certain
-  neurons by the \emph{desired} output, for training purposes in later
-  steps.
+Williams and Zipser describe a method of \emph{teacher-forcing},
+modifying the neural network by replacing the output of certain
+neurons by the \emph{desired} output, for training purposes in later
+steps.
   
-  Unfortunately, it is still really unclear to me \emph{why} one would
-  wish to use recurrent neural networks.  Williams and Zipser describe
-  a number of examples, but they don't seem terribly compelling to me.
-  
-  The algorithm in which the weights can change seems very
-  non-physiological to me --- it verges on being an unmotivated
-  statistical model.  (I doubt that the weights in the brain swing
-  around wildly, but I'll bet that the weights found by this algorithm
-  can swing around wildly.)  The algorithm in which the weights are
-  fixed seems more biological.
-  
-  Note that Williams and Zipser \emph{do not} offer any analysis of
-  running time for their algorithms, or an understanding of when it is
-  likely to work well, and when it is not.  It's very much in the
-  empirical let's-see-how-this-works style adopted through much of the
-  neural networks literature.
-  
-  Summing up: the recurrent neural network works by, at each step,
-  computing the sigmoid function of the weighted sum of the inputs and
-  the previous step's outputs.  Training means specifying a set of
-  desired outputs at particular times, and adapting the weights at
-  each time-step.  Training works by specifying an error function at
-  any given time step, computing the gradient, and updating the
-  weights appropriately.
+Unfortunately, it is still unclear to me \emph{why} one would wish to
+use recurrent neural networks.  Williams and Zipser describe a number
+of examples, but they don't seem compelling.
 
-  \textbf{Compiling to neural networks:} Can we create compilers which
-  translate programs written in a conventional programming language
-  into a neural network?  I'd be especially interested in seeing how
-  this works for AI workhorses such as Prolog.  What could we learn
-  from such a procedure?  (1) Perhaps we could figure out how to link
-  up multiple neural modules, with one or more of the modules coming
-  from the compiler? (2) Maybe we could use a learning technique to
-  further improve the performance of the compiled network.  Googling
-  doesn't reveal a whole lot, although I did find a paper by
-  \link{http://scholar.google.ca/scholar?cluster=10518384657895134615\&hl=en\&as\_sdt=0,5}{Thrun}
-  where he discusses decompiling, i.e., extracting rules from a neural
-  network.  Thrun uses a technique he calls validity-interval
-  analysis, basically propagating intervals for inputs and outputs
-  forwards and backwards through a network.
+The algorithm in which the weights can change seems non-physiological
+--- it verges on being an unmotivated statistical model.  (I doubt
+that the weights in the brain swing around wildly, but I'll bet that
+the weights found by this algorithm can swing around wildly.)  The
+algorithm in which the weights are fixed seems more biological.
+  
+Note that Williams and Zipser \emph{do not} offer any analysis of
+running time for their algorithms, or an understanding of when it is
+likely to work well, and when it is not.  It's very much in the
+empirical let's-see-how-this-works style adopted through much of the
+neural networks literature.
+  
+Summing up: the recurrent neural network works by, at each step,
+computing the sigmoid function of the weighted sum of the inputs and
+the previous step's outputs.  Training means specifying a set of
+desired outputs at particular times, and adapting the weights at each
+time-step.  Training works by specifying an error function at any
+given time step, computing the gradient, and updating the weights
+appropriately.
+
+\textbf{Compiling to neural networks:} Can we create compilers which
+translate programs written in a conventional programming language into
+a neural network?  I'd be especially interested in seeing how this
+works for AI workhorses such as Prolog.  What could we learn from such
+a procedure?  (1) Perhaps we could figure out how to link up multiple
+neural modules, with one or more of the modules coming from the
+compiler? (2) Maybe we could use a learning technique to further
+improve the performance of the compiled network.  Googling doesn't
+reveal a whole lot, although I did find a paper by
+\link{http://scholar.google.ca/scholar?cluster=10518384657895134615\&hl=en\&as\_sdt=0,5}{Thrun}
+where he discusses decompiling, i.e., extracting rules from a neural
+network.  Thrun uses a technique he calls validity-interval analysis,
+basically propagating intervals for inputs and outputs forwards and
+backwards through a network.
 
 \textbf{Softmax function:} Suppose $q_j$ is some set of values.  Then
   we define the softmax function by:
-
-$$p_j \equiv \exp(q_j)/\sum_k \exp(q_j).$$
-  
+\begin{eqnarray}
+p_j \equiv \exp(q_j)/\sum_k \exp(q_j).
+\end{eqnarray}
 This is a probability distribution, which preserves the order of the
 original values.  You can, for example, take the softmax in the final
 layer of a neural network, taking the weighted sum of inputs as the
@@ -543,6 +547,97 @@ beginning to overfit.
 Momentum: smooth out gradient by taking an average of recent
 gradients.
 
+Comments that increasing the number of hidden neurons in all layers
+results in a quadratic increase in time.  It's not clear to me why
+that should be the case --- obviously there is a quadratic increase in
+the number of weights, and so a quadratic increase in time per epoch.
+But maybe it'll take a larger number of epochs to converge?
+
+``[W]e found that using the same size for all layers worked generally
+better or the same as using a decreasing size (pyramid-like) or
+increasing size (upside down pyramid), but of course this may be data
+dependent.''
+
+I am surprised by this.  It seems to contradict our ideas about
+feature learning.  It'd be good to look at Larochelle et al's results.
+Perhaps it reflects the fact that \emph{more} high level concepts can
+be formed out of the ``atoms'' of input than there are atoms.
+
+``For most tasks that we worked on, find that an overcomplete first
+hidden layer works better than an undercomplete one.''
+
+It's not really clear why this is the case.  Again, it may be that
+it's because there are more high-level concepts than low level one.
+Still, that seems to be at odds with my intuition about autoencoders.
+
+States that this is particularly true for unsupervised learning.  That
+\emph{is} consistent with the idea that it's because there are many
+different abstractions possible, far more than basic features.
+
+Claims that there is a ``clean Bayesian justification'' for
+regularization as the negative log-prior.  The discussion that follows
+is extremely interesting and I'm still sorting it out.  The picture
+that emerges seems to be that what we're doing when learning is using
+some kind of maximum likelihood estimation.  In particular, we start
+with some sort of prior in parameter space --- a Gaussian --- and then
+try to find the weights maximizing the probability of the parameters
+(weights), given the training data.  I need to unpack this still
+further: it's regularization as a form of maximum likelihood.  For now
+I'll proceed, and then return to this later.
+
+Normalization: Claims that we should normalize the regularization
+parameter by $B / T$, where $B$ is the mini-batch size, and $T$ is the
+number of training examples.  This is consonant with what I've
+observed.
+
+Early stopping and L2 regularization: comments that these two are
+essentially equivalent, and that one may as well drop L2 rgularization
+when engaged in early stopping.  I don't believe this.  The solution
+spaces will be completely different in the two cases.  I'm happy to
+believe that \emph{sometimes} they'll give the same result, but see no
+reason to believe that they'll always give the same outcome.
+
+L1 regularization and feature selection: Comments that this strongly
+suppresses irrelevant weights.  Also comments that you may wish to
+consider doing both L1 and L2 regularization, with different
+regularization parameters.  That seems sensible to me.
+
+Q: An alternative approach to choosing $\lambda$ is to regard it as an
+extra parameter beyond the weights, and to apply gradient descent to
+it as well.  How well would this work?  My first instinct is to think
+that it won't work --- that $\lambda$ will be driven to zero.  But
+upon more reflection things are more complicated than that.  It'd be
+interesting to know.
+
+Sparsity: Increase sparsity can be compensated by a larger number of
+hidden units.  A sparsity-inducing penalty can be viewed as a way of
+regularizing.  Note that it's no longer so easy to view this in the
+Bayesian framework.  Notes that the L1 penalty seems most natural, but
+is not often used.  Try to push the (mini-batch) average to a
+particular constant.
+
+Neuron nonlinearity: Bengio notes that he's most often used the
+sigmoid, the tanh, $\max(0, a)$, and the hard tanh.  Interesting
+remark about the sigmoid not working well as the top layer of a deep
+supervised net without unsupervised pretraining.  Apparently it's okay
+for auto-encoders.
+
+Weight initialization: Sample uniformly on
+$4\sqrt{6/(\mbox{fan-in}+\mbox{fan-out})}$.  This will give us a total
+length equal to roughly the number of layers.
+
+Hyper-parameter selection as an optimization problem: points out the
+dangers of overfitting your validation data.
+
+Q: When does it make sense to say that we're overfitting?
+
+Approach to parameter search: doing it logarithmically.
+
+Q: Does it make sense to do gradient descent on just a subset of
+weights at a time? I do wonder if that wouldn't sometimes yield better
+results.  Deep learning has something of this flavour.
+
+
 \textbf{LeCun (1998):}
 \link{http://yann.lecun.com/exdb/publis/index.html\#lecun-98}{link}
 
@@ -681,7 +776,6 @@ and learning problems easy and effcient, and where there is a close
 collaboration between machine learning experts and application domain
 ones.''
 
-
 Representable does not imply learnable: in other words, don't focus
 all your attention on one representation (say, neural nets, or SVMs)
 merely because there is some kind of universality theorem for them.
@@ -689,10 +783,244 @@ merely because there is some kind of universality theorem for them.
 Correlation does not imply causation: Keep it in mind when
 interpreting the results of machine learning algorithsm.
 
+\textbf{Bottou (2012):}
+\link{http://leon.bottou.org/papers/bottou-tricks-2012}{(link)}
+
+Notes that there are theorems about the convergence time for batch
+gradient descent (time is logarithmic in the eventual error), and for
+second-order gradient descent.  It's really not clear how valuable
+such results are; I guess it's comforting that they exist.
+
+Notes that there are some powerful results about the convergence of
+stochastic gradient descent, under conditions like $\sum \eta^2 <
+\infty, \sum \eta = \infty$.  Apparently the ``Robbins-Siegmund
+theorem'' helps with convergence.  The relevant paper is
+\link{http://scholar.google.ca/scholar?cluster=509989913518206088\&hl=en\&as\_sdt=0,5}{here}.
+
+Monitor both the training cost and the validation error: Suggests
+periodically evaluating the validation error during training, and
+stopping training when it hasn't improved after some time.
+
+\textbf{Bourland and Kamp (1988):}
+\link{http://scholar.google.com/scholar?cluster=17784424506773259343\&hl=en\&as\_sdt=0,5}{link}
+
+Suggests removing nonlinearity in output.  Motivation: since we're
+trying to recover the original input, claims that it's obviously not a
+good idea to have the nonlinearity.  I don't see that this is true: if
+the inputs are normalized to be between 0 and 1 then there shouldn't
+be any problem.
+
+With this constraint, the problem then is to find $w, b$ and $w', b'$
+minimizing:
+\begin{eqnarray}
+  \sum_x \|w' \sigma(wx+b)+b'-x\|^2,
+\end{eqnarray}
+where the sum is over all input vectors $x$.  Let $X$ be the matrix
+whose columns are the training vectors.  Abusing notation, let $b$ and
+$b'$ be matrices whose columns are $b$ and $b'$, respectively.  Then
+matrix whose columns are the outputs is given by $Y =
+w'\sigma(wX+b)+b'$, where we apply $\sigma$ elementwise to the
+matrix $wX+b$.  The quadratic loss function can then be written:
+\begin{eqnarray}
+  \| w'\sigma(wX+b)+b'-X\|^2,
+\end{eqnarray}
+where $\|\cdot\|$ is here the usual Frobenius matrix norm.
+
+\textbf{Notes on PCA and autoencoders:} PCA is a way of simplifying
+our understanding of data in high dimensions.  Think of the space of
+all possible images.  There's a subset of that space which can
+plausibly be taken to represent faces.  (Note that contextual clues
+can also help).  How can we characterize that subspace?  Classic
+example of PCA: IQ testing.  Take a large number of different tests.
+Turns out that there is a common factor.  Another nice example: a
+helix in 3 dimensions.  There's a major question: how to determine the
+number of hidden units?
+
+\textbf{Ciresan (2012)}: \link{http://arxiv.org/abs/1003.0358}{link}
+This uses just straight-up backprop to train a neural net --- no
+convolutional nets, no pretraining, just online learning with
+backprop.  The main tricks are to use numerous deformed training
+images, and graphics cards to speed up learning.  Apparently, Simard
+et al used a single hidden layer with 800 neurons to get an accuracy
+of 99.3 percent on MNIST.  (It'd be interesting to know whether they
+deformed the images?)
+
+The paper asks whether it was really true that the pre-training is
+necessary?  Can't you just train for a long time?  And the answer
+seems to be yes!
+
+They train online, using slightly deformed images, and claim that this
+means they can use the whole MNIST set for validation.  This seems
+suspect to me --- it relies on the deformations being more or less
+independent of how the network generalizes.  Let's run with it,
+however.
+
+They trained 5 networks, with 2 to 9 hidden layers each.  From 1.34 to
+12.11 million free parameters.  They have a variable learning rate
+that shrinks by a constant factor after each epoch, from 0.001 down to
+0.000001.  This seems absolutely crucial to their success. I'm a
+little surprised by the use of the constant factor decrease, since
+that will bound the ``total'' (so to speak) learning distance
+travered, simply because the geometric sum converges.  It seems like
+you'd get better performance if you chose a learning schedule where
+terms decreased more slowly, so the sum of the learning rates
+diverged.  That's true of the hyperbolic function advocated by Bengio
+in his 2012 paper, whose sum will diverge (albeit, only
+logarithmically).  They initialized weights uniformly at random in the
+range -0.05 to 0.05 --- that's close to, but not the same as, the
+$1/\sqrt{\mbox fan-in}$ that I've preferred.  They use a tanh
+activation function.
+
+They used a GPU to do computations.  It apparently sped the
+deformation routine up by a factor of 10, and forwardprop and backprop
+by a factor of 40!  That's a big improvement.
+
+Typical architecture: 784-1000-500-10 neurons.  They get 0.44 percent
+test error.  That's pretty close to perfect.  The most complex
+architectures were: 784-2500-2000-1500-1000-500-10 and 784-9 x
+10000-10.  These get test errors of 0.32 and 0.43 percent,
+respectively.  Interestingly, there seems be some advantages to having
+non-homogeneous numbers in the layers.
+
+Took 93 CPU seconds to deform the MNIST images.  87 of those seconds
+were for the elastic distortions, so that's what they converted to the
+GPU.  When doing the conversion they converted MNIST images to 29 x 29
+to get a proper center, which simplifies distortion.
+
 \textbf{Krizhevsky (2012):}
-\link{http://www.cs.toronto.edu/~hinton/absps/imagenet.pdf}{link}
+\link{http://www.cs.toronto.edu/~hinton/absps/imagenet.pdf}{link} 1.2
+million images in ImageNet 2010.  1000 classes.  650,000 neurons.
+Five convolutional layers.  Max pooling layers.  Three fully-connected
+layers.  1000-way softmax.  Used dropout to prevent overfitting.
+
+Past image data sets: NORB, Caltech-101/256. CIFAR-10/100.  ``Simple
+recognition tasks can be solved quite well with datasets of this size,
+especially if they are augmented with label-preserving
+transformations.''  ``But objects in realistic settings exhibit
+considerable variability, so to learn to recognize them it is
+necessary to use much larger training sets''.  LabelMe: hundreds of
+thousands of fully-segmented images.  ImageNet: 15 million labeled
+high-res images in over 22,000 categories.
+
+This paper: trained a very large convolutional neural net on subsets
+of ImageNet used in two competitions.  Got by far the best results
+ever reported on those data sets.  Removing any convolutional layer
+significantly decreased performance.  ``All of our experiments suggest
+that our results can be improved simply by waiting for faster GPUs and
+bigger datasets to become available.''
+
+ImageNet: 15 million images, 22,000 categories.  ILSVRC: 1000 images
+in 1000 categories.  1.2 million training images, 50,000 validation
+images, and 150,000 testing images.  ILSVRC-2010: test set labels are
+available.  Top-5 error rate: the fraction of test images for which
+the correct label is not among the five labels considered most
+probable by the model.
+
+ImageNet has variable-resolution images.  They down-sampled to 256
+$\times$ 256.  They did this by rescaling the image so the shorter
+side was of length 256.  Then cropped out the central 256 $\times$ 256
+patch.  They also subtracted the mean activity over the training set
+from each pixel.  This was the complete pre-processing.
+
+Architecture: 8 layers.  5 convolutional.  3 fully-connected.
+
+ReLU Nonlinearity: Instead of sigmoid function they used $f(z) =
+\max(z, 0)$.  They refer to this as a \emph{rectified linear} unit.
+``Deep convolutional neural networks with ReLUs train several times
+faster than their equivalents with tanh units''.  I believe it is
+standard wisdom that convolutional nets work better with tanh units
+than sigmoid.  ``The magnitude of the effect [faster learning...]
+varies with network architecture, but networks with ReLUs consistently
+learn several times faster than equivalents with saturating neurons''.
+
+Training on multiple GPUs: Done in part because the training set
+wouldn't fit into a single GPU's memory.
+
+Local response normalization: They do a local normalization step,
+essentially a kind of brightness normalization.  It reduces error
+rates by a little over 1 percent.
+
+Overlapping pooling: Again, a slight improvement.
+
+Architecture: The first convolutional layer filters the 224 by 224 by
+3 image with 96 kernels of size 11 by 11 by 3.  There is a stride
+distance of 4, i.e., the distance between the receptive field centers
+of neighbouring neurons.  I need to understand quite a bit more about
+CNNs and pooling.
+
+Lots of overfitting: 1.2 million examples, 10 bits of info per example
+(1 in 1000 classification).  But 60 million parameters.  So
+overfitting is a real problem.
+
+Data augmentation: (1) image translations and horizontal reflections.
+Extracting 224 by 224 patches.  This gives them a factor 2048 more
+training data.  The network makes a prediction by extracting five 224
+by 224 patches and their horizontal reflections, and averaging the
+predictions made by the network's softmax layer. (2) Altering the
+intensities of the RGB channels in the training images.  Perform PCA
+on ImageNet and use it to modify the images.  ``This scheme
+approximately captures an important property of natural images,
+namely, that object identity is invariant to changes in the intensity
+and color of the illumination.'' 
+
+
+
+\textbf{Lee (2009):} RBMs.  Two layer.  Bipartite.  Undirected.
+Binary hidden units, $h$.  Binary or real-valued visible units, $v$.
+A weight matrix $W$ between the two layers.  If visible units are
+binary, then we define the energy:
+\begin{eqnarray}
+  E = v^T W h - b^T h-c^T v,
+\end{eqnarray}
+where $b$ are the hidden unit biases, and $c$ are the visible unit
+biases.  For real-valued visible units, modify the energy by adding a
+$1/2 v^2$ term.  This model is simple enough.  How should we think
+about it?  The idea is to start with a given set of values for one
+layer, say the visible layer.  Then sample the hidden units.  Then
+sample the visible layer.  And so on, ping-ponging back and forth.
+
+``In principle, the RBM parameters can be optimized by performing
+stochastic gradient ascent on the log-likelihood of the training
+data.''  The parameters to be optimized are presumably the weights and
+biases.  The likelihood is the probability of the observed outcomes
+(i.e., the training data), given the particular parameters.  I assume
+that the idea is that the visible units are supposed to represent the
+observed data.  So we want to choose the parameters of the model in
+order to maximize the probability of seeing the training data in the
+visible units.  Apparently contrastive divergence is a technique for
+computing the gradient of the log-likelihood.
+
+Convolutional RBM. The weights between the hidden and visible layers
+are shared among all locations in an image.  What exactly does this
+mean?  Suppose we have an $N_V \times N_V$ image.  Then the input
+layer apparently consists of $N_V \times N_V$ binary units.  There are
+$K$ groups in the hidden layer, each an $N_H \times N_H$ array of
+binary units.  So there are $N_H^2 K$ total hidden units.
+
+We index the hidden groups by $k$.  Each hidden group has a bias,
+$b_k$.  All visible units share a single bias, $c$.
+
+For any given group, $k$, we have a single set of $N_W \times N_W$
+weights (the ``filter'').  $N_W \equiv N_V-N_H+1$.  The basic idea is
+to filter the inputs, but translating the filter across the input
+image.
+
+I will come back to the energy function a little later.  XXX.  We can
+do Gibbs sampling to generate the appropriate distributions.
+
+
+
+
+\textbf{Simard (2003)}:
+
+\textbf{Embrechts (2010)}:
+
 
 \textbf{Le (2012):} \link{https://plus.google.com/u/0/+ResearchatGoogle/posts/EMyhnBetd2F}{link}
+
+\textbf{Le et al (2012):} 9 layers.  Locally connected.  Sparse
+autoencoder.  Pooling.  Local contrast normalization.  Can discover
+faces without labels.
 
 \textbf{Seide (2011):}
 \link{http://research.microsoft.com/apps/pubs/default.aspx?id=153169}{link}
@@ -701,10 +1029,15 @@ interpreting the results of machine learning algorithsm.
 
 \textbf{Ranzato (2007):}
 
-\textbf{Bottou (2012):}
-\link{http://leon.bottou.org/papers/bottou-tricks-2012}{(link)}
+\textbf{Larochelle (2009):}
 
 \textbf{Wolpert (XXX):} No free lunch.
+
+\textbf{The NIPS 2012 talks:}
+
+\textbf{Elements of statistical learning:} http://www.stanford.edu/~hastie/local.ftp/Springer/OLD//ESLII_print4.pdf
+
+\textbf{No more pesky learning rates:} \link{http://arxiv.org/pdf/1206.1106.pdf}{link}
 
 \textbf{To do:} Contrastive divergence
 (http://learning.cs.toronto.edu/~hinton/absps/cdmiguel.pdf and
@@ -714,6 +1047,7 @@ Ng's 1997 paper ``Preventing overfitting of cross-validation data''.
 Blumer \emph{et al} with guarantees on induction:
 (http://scholar.google.ca/scholar?cluster=11895938102761137877\&hl=en\&as\_sdt=0,5).
 Would be good to understand this in conjunction with no free lunch.
+NIPS papers are online.  IPAM: https://www.ipam.ucla.edu/schedule.aspx?pc=gss2012
 
 \textbf{On tricks:} Much of what seems to be going on is the discovery
 of tricks (of various generality) which can be used to improve pattern
