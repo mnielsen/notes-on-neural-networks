@@ -963,7 +963,29 @@ approximately captures an important property of natural images,
 namely, that object identity is invariant to changes in the intensity
 and color of the illumination.'' 
 
+Dropout: ``a very efficient version of model combination that only
+cost about a factor of two during training''.  Set to zero the output
+of each hidden neuron with probability 0.5.  Don't contribute to
+forwardprop nor to backprop.  Every time the network is trained it has
+a different architecture, but the architectures share weights.  ``This
+technique reduces complex co-adaptation so neurons, since a neuron
+cannot rely on the presence of other neurons''.  This is going to be
+useful in very large networks with a relative paucity of data.
+``Without dropout, our network exhibits substantial overfitting.
+Dropout roughly doubles the number of iterations required to
+converge.''
 
+Used SGD with momentum.  ``We used an equal learning rate for all
+layers, which we adjusted manually throughout training.  The heuristic
+which we followed was to divide the learning rate by 10 when the
+validation error rate stopped improving with the current learning
+rate.  The learning rate was initialized at 0.01 and reduced three
+times prior to termination.''   That seems like a useful heuristic.
+
+Results: top-1 test set error rate: 37.5 percent.  top-5 test set
+error rate: 17.0 percent.  That seems incredibly good, although not
+human comparable.  They also report a bunch of other results: every
+single one is very, very good.
 
 \textbf{Lee (2009):} RBMs.  Two layer.  Bipartite.  Undirected.
 Binary hidden units, $h$.  Binary or real-valued visible units, $v$.
@@ -1015,6 +1037,7 @@ do Gibbs sampling to generate the appropriate distributions.
 
 \textbf{Embrechts (2010)}:
 
+\textbf{Dropout:}
 
 \textbf{Le (2012):} \link{https://plus.google.com/u/0/+ResearchatGoogle/posts/EMyhnBetd2F}{link}
 
