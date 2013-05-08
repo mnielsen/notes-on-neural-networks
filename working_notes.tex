@@ -686,6 +686,18 @@ regarded as pre-processing of features.  The database was prepared in
 three forms.  One was the form I know it.  A second was a deslanted
 form.  The third reduced the image resolution.
 
+Convolutional networks: They use local receptive fields, shared
+weights, and spatial sub-sampling.  ``With local receptive fields,
+neurons can extract elementary visual features such as oriented edges,
+end-points, corners (or similar features in other signals such as
+speech spectrograms).  These features are then combined by the
+subsequent layers in order to detect higher-order features.''
+``... elementary feature detectors that are useful on one part of the
+image are likely to be useful across the entire image.  This knowledge
+can be applied by forcing a set of units, whose receptive fields are
+located at different places on the image, to have identical weight
+vectors.''
+
 \textbf{On regularization:} I'd like to understand \emph{why} we
 regularize.  Certainly, regularization results in solutions with a
 small norm.  But why do we not what solutions with a larger norm?
