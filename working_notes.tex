@@ -698,6 +698,78 @@ can be applied by forcing a set of units, whose receptive fields are
 located at different places on the image, to have identical weight
 vectors.''
 
+``Units in a layer are organized in planes within which all the units
+share the same set of weights''.  So the basic idea is to convolve the
+original inputs in some small window of the inputs.  We call this a
+``feature map''.  I think Hinton later calls it a kernel(?)  We will
+typically have several different feature maps.  So what we have is a
+convolution stage.  FOr example, we might have a 5 by 5 feature map.
+This is applied to a 5 by 5 receptive field in the input, i.e., a 5 by
+5 area in the input.  Each unit has 25 inputs, and so 25 weights and a
+bias.  ``all the units in a feature map share the same set of 25
+weights and the same bias so they detect the same feature at all
+possible locations on the input.''  ``The other feature maps in the
+layer use different sets of weights and biases, thereby extracting
+different types of local features.''  In LeNet-5 there are 6 feature
+maps.  Note that a squashing function and bias apparently are used ---
+this wasn't apparent earlier, where the focus is on the convolution.
+Note that the feature map output will respect translations of the
+original image.
+
+Sub-sampling: The intuition is that exact location information is not
+necessary.  ``Not only is the precise position of each of those
+features [identified by the feature maps] irrelevant for identifying
+the pattern, it is potentially harmful because the positions are
+likely to vary for different instances of the character.''  ``A simple
+way to reduce the precision with which the position of distinctive
+features are encoded in a feature map is to reduce the spatial
+resolution of the feature map.  This can be achieved with a so-called
+sub-sampling layers [\emph{sic}] which performs a local averaging and
+a sub-sampling, reducing the resolution of the feature map, and
+reducing the sensititivity of the output to shifts and distortions.''
+In LeNet-5 they use a sub-sampling layers, which perform a kind of
+local averaging and sub-sampling.  Basically, they use six 2 by 2
+features maps, one for each of the previous six feature maps.  ``Each
+unit computes the \emph{average} of its four inputs, multiplies it by
+a trainable coefficient, adds a trainable bias, and passes the result
+through a sigmoid function''.  It's notable here that we don't have
+trainable weights in the ordinary fashion.  It's also notable that
+things aren't overlapping in this case, unlike the local receptive
+fields.  Possibilities for this layer: blurring, local max, local min.
+(Depends on parameter values).  
+
+Architecture: ``Successive layers of convolutions and sub-sampling are
+typically alternated...''  Traces the origins of the idea to Hubel and
+Wiesel and to Fukushima.  It sounds as though the main new thing here
+is to try it out with backprop.  The paper also describes some
+previous applications of convolutional neural networks to image and
+speech recognition.
+
+``Since all the weights are learned with back-propagation,
+convolutional networks can be seen as synthesizing their own feature
+extractor.''  Big advantage of reducing the number of parameters: it
+reduces overfitting.
+
+LeNet-5: 7 layers, not counting the input.  32 by 32 inputs.  Note
+that the characters are themselves 20 by 20 pixels centered in a 28 by
+28 field.
+
+Layer C3 (third layer, convolutional): 16 feature maps.  Each unit in
+each feature map is connected to several 5 by 5 neighbourhoods are
+identical locations in a subset of S2's feature maps.  ``WHy not
+connect every S2 feature map to every C3 feature map?''  (1) Reduce
+the number of connections; (2) Forces a break in symmetry in the
+network.  My guess is that it would otherwise work, but might be
+slower.  ``Different feature maps are forced to extract different
+(hopefully complementary) features because they get different sets of
+input.''
+
+Layer C5: 120 feature maps.  Each unit is connected to a 5 by 5
+neighbourhood on all 16 of S4's feature maps.  They state that this
+amounts to a full connection between S4 and C5 --- this is true
+because each feature unit is just a single unit.
+
+
 \textbf{On regularization:} I'd like to understand \emph{why} we
 regularize.  Certainly, regularization results in solutions with a
 small norm.  But why do we not what solutions with a larger norm?
