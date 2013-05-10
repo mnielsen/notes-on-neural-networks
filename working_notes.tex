@@ -769,6 +769,41 @@ neighbourhood on all 16 of S4's feature maps.  They state that this
 amounts to a full connection between S4 and C5 --- this is true
 because each feature unit is just a single unit.
 
+They use a scaled hyperbolic tangent as the squashing function.  ``As
+seen before, the squashing function used in our Convolutional Networks
+is $f(a) = A \tanh(Sa)$.  Symmetric functions are believed to yield
+faster convergence [i.e., learn at a faster rate], although the
+learning can become extremely slow if the weights are too small.  The
+cause of this problem is that in weight space the origin is a fixed
+point of the learning dynamics, and, although it is a saddle point, it
+is attractive in almost all directions''. It seems likely to me that
+we will have a similar problem with the usual sigmoid function.  They
+chose their parameters to ensure $f(\pm 1) = \pm 1$, i.e., for
+convenience.  ``This particular choice of parameters is merely a
+convenience, and does not affect the result.''
+
+They initialize weights with the inverse of the fan-in, omitting the
+square root that I am accustomed to use.  ``The standard deviation of
+the weighted sum scales like the square root of the number of inputs
+when the inputs are independent, and it scales linearly with the
+number of inputs if the inputs are highly correlated.  We choose to
+assume the second hypothesis since some units receive highly
+correlated signals.''  The second clause in the first sentence is
+simply false, since the weights are set independently of the inputs.
+It's interesting that their method apparently works okay anyway, i.e.,
+it must be quite insensitive to this detail.
+
+Final layer in the network: Euclidean Radial Basis functions (RBF),
+one for each class (i.e., 10 in total), with 84 inputs.  The output is
+the squared Euclidean distance between the inputs and the input
+weights.  In other words, the RBF measures how close the input is to
+the weights.  Fascinatingly, the initial values for these were set by
+hand, based on very simple versions of ASCII characters.
+
+``[O]utput units... must be off most of the time.  This is quite
+difficult to achieve with sigmoid units.''  Not sure why. 
+
+
 
 \textbf{On regularization:} I'd like to understand \emph{why} we
 regularize.  Certainly, regularization results in solutions with a
