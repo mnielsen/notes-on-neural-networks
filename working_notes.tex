@@ -803,7 +803,15 @@ hand, based on very simple versions of ASCII characters.
 ``[O]utput units... must be off most of the time.  This is quite
 difficult to achieve with sigmoid units.''  Not sure why. 
 
+Learning schedule: $\eta = 0.0005$ for the first two epochs, $0.0002$
+for the next three, $0.0001$ for the next three, $0.00005$ for the
+next four, and $0.00001$ for the remaining epochs (up to 20, so it was
+eight).
 
+Distortions: ``When distorted data was used for training, the test
+error rate dropped to 0.8 percent (from 0.95 percent without
+deformation).''  It'd be nice to have a nice little library of
+transformations.
 
 \textbf{On regularization:} I'd like to understand \emph{why} we
 regularize.  Certainly, regularization results in solutions with a
