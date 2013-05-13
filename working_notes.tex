@@ -887,6 +887,45 @@ which is (obviously) excellent.
 Support vector machines: Depending on technique, results obtained
 varied between 1.4\% and 0.8\%.
 
+They report on the number of operations required to do a
+classification, and the convolutional networks do quite well.  Much
+better than the SVMs, interestingly enough, perhaps because the SVMs
+are fitting high-order polynomials, and thus have a very large number
+of terms.
+
+``When plenty of data is available, many methods can attain
+respectable accuracy.  The neural-net methods run much faster and
+require much less space than memory-based techniques.  The neural
+nets' advantage will become more striking as training databases
+continue to increase in size.''
+
+Invariance and noise resistance: ``Convolutional networks are
+particularly well suited for recognizing or rejecting shapes with
+widely varying size, position, and orientation, such as the ones
+typically produced by heuristic segmenters in real-world string
+recognition systems.  In an experiment like the one described above,
+the importance of noise resistance and distortion invariance is not
+obvious.  The situation in most real applications is quite different.
+Characters must generally be segmented our of their context prior to
+recognition.  Segmentation algorithms... often leave extraneous marks
+in character images... or sometimes cut characters too much and
+produce incomplete characters.  Those images cannot be reliably
+size-normalized and centered.  Normalizing incomplete characters can
+be very dangerous.  For example, an enlarged stray mark can look like
+a genuine 1.''
+
+Conclusions: ``Convolutional Neural Networks have been show to
+eliminate the need for hand-crafter feature extractors.  Graph
+Transformer Networks have been shown to reduce the need for
+hand-crafted heuristics, manual labeling, and manual parameter tuning
+in document recognition systems.''  ``It was shown that all the steps
+of a document analysis system can be formulated as graph transformers
+through which gradients can be back-propagated.''  ``It is worth
+pointing out that data generating models... and the Maximum Likelihood
+Principle were not called upon to justify most of the architectures
+and training criteria described in this paper.''
+
+
 \textbf{On regularization:} I'd like to understand \emph{why} we
 regularize.  Certainly, regularization results in solutions with a
 small norm.  But why do we not what solutions with a larger norm?
