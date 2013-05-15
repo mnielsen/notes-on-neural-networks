@@ -1,4 +1,4 @@
-\documentclass[12pt]{article}
+\documentclass[12pt]{report}
 
 \usepackage{hyperref}
 
@@ -12,6 +12,8 @@
 
 \maketitle
 
+\chapter{Introduction}
+
 \textbf{Working notes, by Michael Nielsen:} These are rough working
 notes, written as part of my study of neural networks.  Note that they
 really are \emph{rough}, and I've made no attempt to clean them up,
@@ -24,12 +26,7 @@ are the most significant results about deep learning and neural
 networks?  And then there is the broader question: how to build an
 artificial intelligence?  My reading will address both questions.
 
-\textbf{Recurrent neural networks (RNN):} According to Wikipedia, RNNs
-have achieved the best results to date on handwriting recognition.  An
-obvious question is: what are the respective advantages of RNNs and
-feedforward networks?  Are there important problems for which one or
-the other is preferable?  Why?  What I've read about these questions
-is opaque.
+\chapter{Papers}
 
 \textbf{Williams and Zipser (1989) - a gradient-based learning method
   for recurrent neural networks:}
@@ -112,31 +109,6 @@ time-step.  Training works by specifying an error function at any
 given time step, computing the gradient, and updating the weights
 appropriately.
 
-\textbf{Compiling to neural networks:} Can we create compilers which
-translate programs written in a conventional programming language into
-a neural network?  I'd be especially interested in seeing how this
-works for AI workhorses such as Prolog.  What could we learn from such
-a procedure?  (1) Perhaps we could figure out how to link up multiple
-neural modules, with one or more of the modules coming from the
-compiler? (2) Maybe we could use a learning technique to further
-improve the performance of the compiled network.  Googling doesn't
-reveal a whole lot, although I did find a paper by
-\link{http://scholar.google.ca/scholar?cluster=10518384657895134615\&hl=en\&as\_sdt=0,5}{Thrun}
-where he discusses decompiling, i.e., extracting rules from a neural
-network.  Thrun uses a technique he calls validity-interval analysis,
-basically propagating intervals for inputs and outputs forwards and
-backwards through a network.
-
-\textbf{Softmax function:} Suppose $q_j$ is some set of values.  Then
-  we define the softmax function by:
-\begin{eqnarray}
-p_j \equiv \exp(q_j)/\sum_k \exp(q_j).
-\end{eqnarray}
-This is a probability distribution, which preserves the order of the
-original values.  You can, for example, take the softmax in the final
-layer of a neural network, taking the weighted sum of inputs as the
-$q_j$ values, and then applying the softmax.  The output from the
-network can then be interpreted as a probability distribution.
 
 \textbf{Baldi and Hornik, 1989 - characterizes linear autoencoders}:
 \link{http://scholar.google.ca/scholar?cluster=11637720331851320383&hl=en&as_sdt=0,5}{(link)}
@@ -178,68 +150,83 @@ Summing up, in a linear neural network, \emph{a linear autoencoder is
   PCA}.  That's a useful fact to remember.  Examination of the
 remainder of the paper suggests that these are the key facts.
 
-\textbf{Thinking geometrically:} Suppose we're asked to tell the
-difference between pictures of a human face, and pictures of a
-giraffe.  We can represent the pictures as points $x$ in a very
-high-dimensional space.  And so our task is to divide that space up
-into two parts: one is classified as giraffe, the other as human face.
-(Maybe it should be three parts: the thrid part would be: neither face
-nor giraffe).  And so what we really want is algorithms for dividing
-up that space.  In some sense we're interested in understanding the
-space of all such algorithms. 
+\textbf{Olshausen and Field (1996):} Presents a method for finding
+low-complexity representations of natural images, in terms of atomic
+images --- which they call ``sparse codes'' --- which are localized,
+oriented, and scale-sensitive.  These are found using an unsupervised
+learning algorithm with a bias toward good quality, low-complexity
+representations.  The codes seem to be quite similar to the receptive
+fields found in the human visual system.
 
-It'd be interesting to lay out all the different curlicues to thinking
-in this way: the opportunities, and the pitfalls.  There are at least
-three broad approaches: (1) the \emph{pure geometric approach}, based
-on finding mathematical structures to divide the space; (2) the
-\emph{biological approach}, where we try to figure out how we do it;
-and (3) the \emph{kludge approach}, where we simply try lots of ideas,
-and pile them up on top of one another.  That's a pretty rough
-division, but seems like a good starting point for thought.  My bet is
-that progress comes from playing these ideas off against one another.
+The \emph{receptive field} for a cell in the retina is the volume of
+space (roughly, a cone) which can stimulate that cell to fire.  Nearby
+cells can have overlapping (or nearby) receptive fields.  Other cells
+in the visual cortex also have receptive fields, but they may be more
+complex, since the light has already been filtered through one or more
+levels of processing.  
 
-\textbf{Finding linear approximations (PCA):} It'll be useful to
-review PCA here.  Suppose we have a set of data points $x$ in some
-high-dimensional (vector) space.  Then we'd like to find a
-$k$-dimensional projector $P$ such that the following error function
-is minimized:
+The paper claims that the receptive fields in the primary visual
+cortex are: (a) spatially localized; (b) oriented; and (c) can
+distinguish structure at different scales.
+
+There is then a question: so what are those receptive fields?  In a
+way, we can view this as being the question: to what type of images do
+different cells in our primary visual cortex respond?  Answering that
+question seems like a good start for understanding any higher-level
+image processing.  It's the question: what are the atoms of image
+processing?  Or perhaps a better way is to think of them as the
+molecules of image processing, since they're one level up from the
+pixel level.
+
+They develop an unsupervised learning algorithm which, trained on
+natural data, can find receptive fields that are spatially localized,
+oriented, and can distinguish structure at different scales.
+
+Olshausen and Field want to decompose an image as:
 \begin{eqnarray}
-\sum_x \| x-Px \|^2.
+  I(x,y) = \sum_j a_j \phi_j(x,y).
 \end{eqnarray}
-This error can be rewritten as $\mbox{tr}((I-P)\Sigma)$, where $\Sigma
-\equiv \sum_x x x^T$.  And so we simply choose $P$ to project onto the
-eigenvectors of $\Sigma$ with the $k$ largest eigenvalues.  The
-\emph{principal components} are the eigenvectors of $\Sigma$, in order
-of decreasing eigenvalue.  (There may, of course, be some ambiguity
-when $\Sigma$ is degenerate).
+The idea is that the $\phi_j$ form a (possibly overcomplete) basis for
+the space of images.  They want to choose the $\phi_j$ which ``results
+in the coefficient values being as statistically independent as
+possible over an ensemble of natural images''.  In some sense, the
+different $a_j$ would be ``telling us different things'' about the
+image.  They also want the coefficient values to be sparse, favouring
+simple representations over more complex.
 
-Practically speaking, suppose we have a billion images, each of which
-can be regarded as a vector in a 100,000-dimensional space.  We can
-reduce to (say) a 100-dimensional space.  This gets rid of much of the
-irrelevant structure, and hopefully leaves a structure that is useful
-for comparing images.
+O \& F try to search for a suitable set of $\phi_j$s by introducing an
+error function:
+\begin{eqnarray}
+  E = -\mbox{[preserve information]}-\lambda\mbox{[sparseness of } a_j {]}.
+\end{eqnarray}
+This error is \emph{for a single image}.  The first term is just the
+$l_2$ error, i.e., (minus) the quadratic distance between the image
+and its representation.  The sparseness term is just a nonlinear
+function of the $a_j$ coefficients, quantifying how sparse they are.
 
-\textbf{We don't seem to have much theory of what it means to
-  generalize:} We have all these techniques based on
-parameter-fitting.  But we have a paucity of strong underlying
-theoretical ideas.
+The idea is to do online learning with this error function, presenting
+it with natural images, and gradually minimizing the error.  (I see
+later in the article that it was actually batch learning using
+conjugate gradient descent.  It appears that some kind of average
+error is being computed.)  The result will be an overcomplete basis
+set that favours sparse decompositions of images.
 
-\textbf{Deep learning requires nonlinear neurons:} Put another way,
-deep learning with linear neurons doesn't help.  Via linear embedding
-it's equivalent to a single hidden layer whose size is just the
-minimal size of any of the original hidden layers.  So there is
-absolutely no advantage to doing deep learning with linear neurons.
+The ``sparsification'' idea is a very interesting one.  Basically,
+it's a way of trying to force a kind of Occam's razor into the system.
+It's a bit like autoencoders, forcing a simple explanation of complex
+data.
+
+O \& F note that wavelets have been used to find sparse codes
+previously.
+
 
 \textbf{Tenenbaum, de Silva and Langford, 2000:}
 \link{http://scholar.google.ca/scholar?cluster=14602426245887619907&hl=en&as_sdt=0,5}{(link)}
-There's a lot I can learn from this paper, so I'll take a lot of
-notes.  Some of those notes I'll factor out.  
-
 They mention a technique called multidimensional scaling (MDS), which
-I hadn't heard of.  The general idea seems to be that we have a lot of
-items, and we know some ``dissimilarities'' between items.  The goal
-is to find a metric space embedding of those items so that the
-distances are roughly equal to the dissimilarities.
+I hadn't heard of.  The idea seems to be that we have a lot of items,
+and we know some ``dissimilarities'' between items.  The goal is to
+find a metric space embedding of those items so that the distances are
+roughly equal to the dissimilarities.
 
 A sample problem: we have a 4096-dimensional space, corresponding to
 64 by 64 pixel images.  A (nonlinear) subspace of this corresponds to
@@ -327,115 +314,7 @@ network with nodes for each entity and for each relationship.  We'd
 try to design the network so that the only relationships which are
 active would be those which are true, given the active entities.
 
-\textbf{Olshausen and Field (1996):} Presents a method for finding
-low-complexity representations of natural images, in terms of atomic
-images --- which they call ``sparse codes'' --- which are localized,
-oriented, and scale-sensitive.  These are found using an unsupervised
-learning algorithm with a bias toward good quality, low-complexity
-representations.  The codes seem to be quite similar to the receptive
-fields found in the human visual system.
 
-The \emph{receptive field} for a cell in the retina is the volume of
-space (roughly, a cone) which can stimulate that cell to fire.  Nearby
-cells can have overlapping (or nearby) receptive fields.  Other cells
-in the visual cortex also have receptive fields, but they may be more
-complex, since the light has already been filtered through one or more
-levels of processing.  
-
-The paper claims that the receptive fields in the primary visual
-cortex are: (a) spatially localized; (b) oriented; and (c) can
-distinguish structure at different scales.
-
-There is then a question: so what are those receptive fields?  In a
-way, we can view this as being the question: to what type of images do
-different cells in our primary visual cortex respond?  Answering that
-question seems like a good start for understanding any higher-level
-image processing.  It's the question: what are the atoms of image
-processing?  Or perhaps a better way is to think of them as the
-molecules of image processing, since they're one level up from the
-pixel level.
-
-They develop an unsupervised learning algorithm which, trained on
-natural data, can find receptive fields that are spatially localized,
-oriented, and can distinguish structure at different scales.
-
-Olshausen and Field want to decompose an image as:
-\begin{eqnarray}
-  I(x,y) = \sum_j a_j \phi_j(x,y).
-\end{eqnarray}
-The idea is that the $\phi_j$ form a (possibly overcomplete) basis for
-the space of images.  They want to choose the $\phi_j$ which ``results
-in the coefficient values being as statistically independent as
-possible over an ensemble of natural images''.  In some sense, the
-different $a_j$ would be ``telling us different things'' about the
-image.  They also want the coefficient values to be sparse, favouring
-simple representations over more complex.
-
-O \& F try to search for a suitable set of $\phi_j$s by introducing an
-error function:
-\begin{eqnarray}
-  E = -\mbox{[preserve information]}-\lambda\mbox{[sparseness of } a_j {]}.
-\end{eqnarray}
-This error is \emph{for a single image}.  The first term is just the
-$l_2$ error, i.e., (minus) the quadratic distance between the image
-and its representation.  The sparseness term is just a nonlinear
-function of the $a_j$ coefficients, quantifying how sparse they are.
-
-The idea is to do online learning with this error function, presenting
-it with natural images, and gradually minimizing the error.  (I see
-later in the article that it was actually batch learning using
-conjugate gradient descent.  It appears that some kind of average
-error is being computed.)  The result will be an overcomplete basis
-set that favours sparse decompositions of images.
-
-The ``sparsification'' idea is a very interesting one.  Basically,
-it's a way of trying to force a kind of Occam's razor into the system.
-It's a bit like autoencoders, forcing a simple explanation of complex
-data.
-
-O \& F note that wavelets have been used to find sparse codes
-previously.
-
-\textbf{Restricted Boltzmann machines:} The idea is not to learn a
-function, but rather to learn a probability distribution.  There are
-two layers of neurons: a visible layer, and a hidden layer.  All
-visible units are connected to all hidden units.  The energy of a
-given configuration is just:
-\begin{eqnarray}
-  E(v, h) = -\sum_i a_i v_i-\sum_j b_j h_j-\sum_{ij} w_{ij} v_i h_j \\
-  & = & -a \cdot v-b\cdot h -v^T W h,
-\end{eqnarray}
-where $a$ are the biases for the visible units, $b$ are the biases for
-the hidden units, and $W$ is the weight matrix.  The distribution is
-just the standard Boltzmann distribution, at some fixed temperature.
-Apparently it can be shown that:
-\begin{eqnarray}
-  p(v_i = 1 | h) = \sigma( a_i + (Wh)i),
-\end{eqnarray}
-where $\sigma$ is the usual sigmoid function.  (I'll bet this is easy
-to show, just by summing out all the other visible units.)
-Furthermore, the $v_i$ are independent of one another, given $h$.
-This too would be easy to show --- it'll be a straightforward
-consequence of the bipartite nature of the graph. So we can compute
-the probability of $v$, given $h$, simply by multiplying sigmoids.
-
-Let's suppose we wanted to train an RBM with a set of images.  The
-images would correspond to the visible units, while the hidden units
-would be feature detectors.  The idea is to adjust the weights and
-biases so that training images have a high probability, i.e., a low
-energy.  
-
-In a little more detail, suppose we input a training image.  Then we
-can stochastically pick a corresponding value for the hidden units.
-Now, feed that back, and stochastically choose a value for the image.
-In an ideal world, we'd recover the original image.  We modify the
-weights in such a way as to improve the fidelity of the recovered
-image.
-
-Well, the penny finally drops: an RBM can be viewed as a neural
-network in which the transitions are probabilistic.  That's all!
-Frankly, we don't even really need the stuff about ground states,
-although it's a beautiful thing to keep in mind.
 
 \textbf{Hinton and Salakhutdinov (2006):}
 \link{http://scholar.google.ca/scholar?cluster=15344645275208957628}{(link)}
@@ -926,56 +805,6 @@ Principle were not called upon to justify most of the architectures
 and training criteria described in this paper.''
 
 
-\textbf{On regularization:} I'd like to understand \emph{why} we
-regularize.  Certainly, regularization results in solutions with a
-small norm.  But why do we not what solutions with a larger norm?
-Will something bad happen to us if we allow such solutions?
-
-The standard argument: what's bad is that overfitting can occur.  And
-thus regularization helps reduce overfitting.  It'd be nice to have an
-example where overfitting actually occurs.  It's really not clear that
-there \emph{should} be a problem with overfitting.  In fact, neural
-networks eventually become virtually invariant under rescaling of
-their weights and biases.  So it's really not clear that it should
-help.
-
-Returning to regularization, here's the standard story people tell to
-explain why they regularize.  The story is that they want to avoid
-high-complexity solutions, in order to avoid over-fitting.  Solutions
-with smaller norms are in some sense lower complexity.  And therefore
-it makes sense to look for solutions with smaller norm.  One way of
-doing this is to penalize solutions with larger norms.  Thus, we
-should add a term to the cost which penalizes such solutions.
-
-Now, this is just a story.  It's not in any sense a sharp
-justification.  In fact, the impact of regularization is still being
-understood.  Researchers write papers where they try different
-approaches to regularization, compare them to see which works better,
-and try to understand why different approaches work the way the day.
-
-When can overfitting occur?  Typically, when there are more parameters
-in the model than there is training data.  What's odd about this is
-that regularization doesn't really help all that much with this
-problem.  It just restricts one degee of freedom.
-
-Many different types of regularization possible.  I will just use the
-most standard and obvious, which is quadratic.  Anything which
-penalizes high-complexity solutions is okay.  It's really a research
-topic.
-
-Empirically: I find that regularization seems to help.  When we
-regularize I get higher accuracies, by quite a bit.  I don't
-understand why that is.
-
-Maybe I'm already overfitting, and regularization is helping reduce
-that problem.  It's possible: I have 20,000 or so parameters in my
-model.  It'd be nice to see if this is the case.
-
-An example of overfitting: I'll bet I can it to overfit when we use
-just 50 training examples.  And I can probably more or less prove this
-using cross-validation.
-
-Look at LeCun \emph{et al}'s results: do they regularize, or not?
 
 \textbf{Domingos (2012):} \link{http://scholar.google.ca/scholar?cluster=4404716649035182981\&hl=en\&as\_sdt=0,5}{link}
 
@@ -1066,15 +895,6 @@ matrix $wX+b$.  The quadratic loss function can then be written:
 \end{eqnarray}
 where $\|\cdot\|$ is here the usual Frobenius matrix norm.
 
-\textbf{Notes on PCA and autoencoders:} PCA is a way of simplifying
-our understanding of data in high dimensions.  Think of the space of
-all possible images.  There's a subset of that space which can
-plausibly be taken to represent faces.  (Note that contextual clues
-can also help).  How can we characterize that subspace?  Classic
-example of PCA: IQ testing.  Take a large number of different tests.
-Turns out that there is a common factor.  Another nice example: a
-helix in 3 dimensions.  There's a major question: how to determine the
-number of hidden units?
 
 \textbf{Ciresan (2012)}: \link{http://arxiv.org/abs/1003.0358}{link}
 This uses just straight-up backprop to train a neural net --- no
@@ -1227,6 +1047,54 @@ error rate: 17.0 percent.  That seems incredibly good, although not
 human comparable.  They also report a bunch of other results: every
 single one is very, very good.
 
+\textbf{Lee (2009):}
+\link{http://videolectures.net/icml09\_lee\_cdb/}{link} A video
+version of the paper below.  ``We are interested in scaling up deep
+belief networks to learn generative models and to perform inference on
+challenging problems.''  RBMs.  Visible nodes: input (training) data.
+Hidden nodes: encode statistical relationships in the visible nodes.
+``Unsupervised training using Contrastive Divergence approximation to
+maximum likelihood''.  Deep belief network: ``Greedy layerwise
+training using RBMs''.  Want to scale DBNs to realistic image sizes:
+200 by 200 pixels.  One way to deal with this is to use a
+convolutional net.  Alternate between ``detection'' and ``pooling''
+layers.  ``Detection layers involve weights shared between all image
+locations'': we have a window of features, sliding across the input
+image.  ``Each pooling unit computes the maximum of the activation of
+several detection units''.  It shrinks the representation in higher
+layers.  They define a convolutional RBM.  It's very similar to a
+standard RBM, but with a couple of differences.  One, the weights are
+shared across hidden units, as in a convolutional net.  Second, they
+impose a constrain on the hidden units --- basically, local sums can't
+be too large.  It's not quite clear to me why they're doing this, but
+they are.  They can still do block Gibbs sampling.  
+
+Convolutional DBNs: They do greedy, layerwise training, training one
+convolutional RBM at a time.  They can both infer forwards and
+backwards through the layers.
+
+Results (MNIST): They trained a two-layer CDBN on \emph{unlabeled}
+MNIST data.  The first layer learns ``strokes'', while the second
+layer learns groupings of strokes.  Nice results: down to 0.82\% error
+rate.  I like the fact that they talk about how the error rate scales
+with the number of labeled examples.
+
+Results (natural images): First layer it learns localized, orinted
+edges.  Second layer: contours, corners, arcs, surface boundaries.
+Caltech 101: 65.4\% accuracy.  Final result is competitive.  Training
+images unrelated to Caltech 101.  Three-layer network from faces:
+first layer learns edges, second layer learns eyes, third layer learns
+faces.  They're computing some kind of precision-recall curve.  I
+don't quite get this --- it's an unfamiliar useage to me.  They do
+some training with multiple classes (cars, faces, motorbikes,
+aeroplanes).  The first layer gets general-purpose features.  The
+second layer gets object-class-specific features, as well as some
+shared features.  The third layer gets highly specific features.  Nice
+conditional entropy graph: uncertainty in the class, given the number
+of features which are active.  Wonderful ``filling in'' of faces.
+
+
+
 \textbf{Lee (2009):} RBMs.  Two layer.  Bipartite.  Undirected.
 Binary hidden units, $h$.  Binary or real-valued visible units, $v$.
 A weight matrix $W$ between the two layers.  If visible units are
@@ -1272,6 +1140,10 @@ do Gibbs sampling to generate the appropriate distributions.
 
 
 
+\textbf{Lee and Mumford (2003):}
+\link{http://dash.harvard.edu/bitstream/handle/1/3637109/Mumford\_HierarchBayesInfer.pdf?sequence=1}{link}
+This looks like great background reading on the idea of doing
+hierarchical inference in the visual cortex.
 
 \textbf{Simard (2003)}:
 
@@ -1292,6 +1164,8 @@ faces without labels.
 
 \textbf{Ranzato (2007):}
 
+\textbf{Lee (2008):} 
+
 \textbf{Larochelle (2009):}
 
 \textbf{Wolpert (XXX):} No free lunch.
@@ -1301,6 +1175,11 @@ faces without labels.
 \textbf{Elements of statistical learning:} \link{http://www.stanford.edu/\~hastie/local.ftp/Springer/OLD//ESLII\_print4.pdf}{link}
 
 \textbf{No more pesky learning rates:} \link{http://arxiv.org/pdf/1206.1106.pdf}{link}
+
+\textbf{Distributed deep learning:}
+\link{http://research.google.com/archive/large\_deep\_networks_nips2012.html}{link}.
+
+\textbf{Stanford tutorial:} http://ufldl.stanford.edu/wiki/index.php/UFLDL\_Tutorial
 
 \textbf{To do:} Contrastive divergence
 (http://learning.cs.toronto.edu/~hinton/absps/cdmiguel.pdf and
@@ -1312,10 +1191,8 @@ Blumer \emph{et al} with guarantees on induction:
 Would be good to understand this in conjunction with no free lunch.
 NIPS papers are online.  IPAM: https://www.ipam.ucla.edu/schedule.aspx?pc=gss2012
 
-\textbf{On tricks:} Much of what seems to be going on is the discovery
-of tricks (of various generality) which can be used to improve pattern
-recognition performance.  There are some general heuristics: \emph{use
-  symmetry} is obviously one.
+
+\chapter{Questions and ideas}
 
 \textbf{Idea: oversampling of outliers:} This is done using online
 training.  The idea is to gradually identify outliers, and to up the
@@ -1338,8 +1215,6 @@ probabilities.  However, it might be possible to use an expander
 construction to do some kind of local sampling which would, however,
 remain rapidly mixing.
 
-\section{Questions}
-
 \emph{Question:} Might we do better using something apart from the
 $\sigma$ function?
 
@@ -1354,5 +1229,201 @@ same number of neurons as a shallow neural network?
 
 \emph{Question:} Can we identify outlier training data by looking for
 gradient vectors that are unusual?
+
+\chapter{Miscellanea}
+
+\textbf{Compiling to neural networks:} Can we create compilers which
+translate programs written in a conventional programming language into
+a neural network?  I'd be especially interested in seeing how this
+works for AI workhorses such as Prolog.  What could we learn from such
+a procedure?  (1) Perhaps we could figure out how to link up multiple
+neural modules, with one or more of the modules coming from the
+compiler? (2) Maybe we could use a learning technique to further
+improve the performance of the compiled network.  Googling doesn't
+reveal a whole lot, although I did find a paper by
+\link{http://scholar.google.ca/scholar?cluster=10518384657895134615\&hl=en\&as\_sdt=0,5}{Thrun}
+where he discusses decompiling, i.e., extracting rules from a neural
+network.  Thrun uses a technique he calls validity-interval analysis,
+basically propagating intervals for inputs and outputs forwards and
+backwards through a network.
+
+\textbf{Deep learning requires nonlinear neurons:} Put another way,
+deep learning with linear neurons doesn't help.  Via linear embedding
+it's equivalent to a single hidden layer whose size is just the
+minimal size of any of the original hidden layers.  So there is
+absolutely no advantage to doing deep learning with linear neurons.
+
+\textbf{No theory of generalization:} We have all these techniques
+based on parameter-fitting.  But we have a paucity of strong
+underlying theoretical ideas.
+
+\textbf{Principal Components Analysis (PCA):} It'll be useful to
+review PCA here.  Suppose we have a set of data points $x$ in some
+high-dimensional (vector) space.  Then we'd like to find a
+$k$-dimensional projector $P$ such that the following error function
+is minimized:
+\begin{eqnarray}
+\sum_x \| x-Px \|^2.
+\end{eqnarray}
+This error can be rewritten as $\mbox{tr}((I-P)\Sigma)$, where $\Sigma
+\equiv \sum_x x x^T$.  And so we simply choose $P$ to project onto the
+eigenvectors of $\Sigma$ with the $k$ largest eigenvalues.  The
+\emph{principal components} are the eigenvectors of $\Sigma$, in order
+of decreasing eigenvalue.  (There may, of course, be some ambiguity
+when $\Sigma$ is degenerate).
+
+Practically speaking, suppose we have a billion images, each of which
+can be regarded as a vector in a 100,000-dimensional space.  We can
+reduce to (say) a 100-dimensional space.  This gets rid of much of the
+irrelevant structure, and hopefully leaves a structure that is useful
+for comparing images.
+
+\textbf{PCA and autoencoders:} PCA is a way of simplifying our
+understanding of data in high dimensions.  Think of the space of all
+possible images.  There's a subset of that space which can plausibly
+be taken to represent faces.  (Note that contextual clues can also
+help).  How can we characterize that subspace?  Classic example of
+PCA: IQ testing.  Take a large number of different tests.  Turns out
+that there is a common factor.  Another nice example: a helix in 3
+dimensions.  There's a major question: how to determine the number of
+hidden units?
+
+\textbf{Recurrent neural networks (RNN):} According to Wikipedia, RNNs
+have achieved the best results to date on handwriting recognition.  An
+obvious question is: what are the respective advantages of RNNs and
+feedforward networks?  Are there important problems for which one or
+the other is preferable?  Why?  What I've read about these questions
+is opaque.
+
+\textbf{Regularization:} I'd like to understand \emph{why} we
+regularize.  Certainly, regularization results in solutions with a
+small norm.  But why do we not what solutions with a larger norm?
+Will something bad happen to us if we allow such solutions?
+
+The standard argument: what's bad is that overfitting can occur.  And
+thus regularization helps reduce overfitting.  It'd be nice to have an
+example where overfitting actually occurs.  It's really not clear that
+there \emph{should} be a problem with overfitting.  In fact, neural
+networks eventually become virtually invariant under rescaling of
+their weights and biases.  So it's really not clear that it should
+help.
+
+Returning to regularization, here's the standard story people tell to
+explain why they regularize.  The story is that they want to avoid
+high-complexity solutions, in order to avoid over-fitting.  Solutions
+with smaller norms are in some sense lower complexity.  And therefore
+it makes sense to look for solutions with smaller norm.  One way of
+doing this is to penalize solutions with larger norms.  Thus, we
+should add a term to the cost which penalizes such solutions.
+
+Now, this is just a story.  It's not in any sense a sharp
+justification.  In fact, the impact of regularization is still being
+understood.  Researchers write papers where they try different
+approaches to regularization, compare them to see which works better,
+and try to understand why different approaches work the way the day.
+
+When can overfitting occur?  Typically, when there are more parameters
+in the model than there is training data.  What's odd about this is
+that regularization doesn't really help all that much with this
+problem.  It just restricts one degee of freedom.
+
+Many different types of regularization possible.  I will just use the
+most standard and obvious, which is quadratic.  Anything which
+penalizes high-complexity solutions is okay.  It's really a research
+topic.
+
+Empirically: I find that regularization seems to help.  When we
+regularize I get higher accuracies, by quite a bit.  I don't
+understand why that is.
+
+Maybe I'm already overfitting, and regularization is helping reduce
+that problem.  It's possible: I have 20,000 or so parameters in my
+model.  It'd be nice to see if this is the case.
+
+An example of overfitting: I'll bet I can it to overfit when we use
+just 50 training examples.  And I can probably more or less prove this
+using cross-validation.
+
+Look at LeCun \emph{et al}'s results: do they regularize, or not?
+
+\textbf{Restricted Boltzmann machines:} The idea is not to learn a
+function, but rather to learn a probability distribution.  There are
+two layers of neurons: a visible layer, and a hidden layer.  All
+visible units are connected to all hidden units.  The energy of a
+given configuration is just:
+\begin{eqnarray}
+  E(v, h) = -\sum_i a_i v_i-\sum_j b_j h_j-\sum_{ij} w_{ij} v_i h_j \\
+  & = & -a \cdot v-b\cdot h -v^T W h,
+\end{eqnarray}
+where $a$ are the biases for the visible units, $b$ are the biases for
+the hidden units, and $W$ is the weight matrix.  The distribution is
+just the standard Boltzmann distribution, at some fixed temperature.
+Apparently it can be shown that:
+\begin{eqnarray}
+  p(v_i = 1 | h) = \sigma( a_i + (Wh)i),
+\end{eqnarray}
+where $\sigma$ is the usual sigmoid function.  (I'll bet this is easy
+to show, just by summing out all the other visible units.)
+Furthermore, the $v_i$ are independent of one another, given $h$.
+This too would be easy to show --- it'll be a straightforward
+consequence of the bipartite nature of the graph. So we can compute
+the probability of $v$, given $h$, simply by multiplying sigmoids.
+
+Let's suppose we wanted to train an RBM with a set of images.  The
+images would correspond to the visible units, while the hidden units
+would be feature detectors.  The idea is to adjust the weights and
+biases so that training images have a high probability, i.e., a low
+energy.  
+
+In a little more detail, suppose we input a training image.  Then we
+can stochastically pick a corresponding value for the hidden units.
+Now, feed that back, and stochastically choose a value for the image.
+In an ideal world, we'd recover the original image.  We modify the
+weights in such a way as to improve the fidelity of the recovered
+image.
+
+Well, the penny finally drops: an RBM can be viewed as a neural
+network in which the transitions are probabilistic.  That's all!
+Frankly, we don't even really need the stuff about ground states,
+although it's a beautiful thing to keep in mind.
+
+\textbf{Softmax function:} Suppose $q_j$ is some set of values.  Then
+  we define the softmax function by:
+\begin{eqnarray}
+p_j \equiv \exp(q_j)/\sum_k \exp(q_j).
+\end{eqnarray}
+This is a probability distribution, which preserves the order of the
+original values.  You can, for example, take the softmax in the final
+layer of a neural network, taking the weighted sum of inputs as the
+$q_j$ values, and then applying the softmax.  The output from the
+network can then be interpreted as a probability distribution.
+
+\textbf{Thinking geometrically:} Suppose we're asked to tell the
+difference between pictures of a human face, and pictures of a
+giraffe.  We can represent the pictures as points $x$ in a very
+high-dimensional space.  And so our task is to divide that space up
+into two parts: one is classified as giraffe, the other as human face.
+(Maybe it should be three parts: the thrid part would be: neither face
+nor giraffe).  And so what we really want is algorithms for dividing
+up that space.  In some sense we're interested in understanding the
+space of all such algorithms. 
+
+It'd be interesting to lay out all the different curlicues to thinking
+in this way: the opportunities, and the pitfalls.  There are at least
+three broad approaches: (1) the \emph{pure geometric approach}, based
+on finding mathematical structures to divide the space; (2) the
+\emph{biological approach}, where we try to figure out how we do it;
+and (3) the \emph{kludge approach}, where we simply try lots of ideas,
+and pile them up on top of one another.  That's a pretty rough
+division, but seems like a good starting point for thought.  My bet is
+that progress comes from playing these ideas off against one another.
+
+\textbf{Tricks:} Much of what seems to be going on is the discovery of
+tricks (of various generality) which can be used to improve pattern
+recognition performance.  There are some general heuristics: \emph{use
+  symmetry} is obviously one.
+
+
+
 
 \end{document}
