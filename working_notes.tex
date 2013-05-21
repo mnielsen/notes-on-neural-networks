@@ -601,6 +601,38 @@ to do?  What are its limits?
 ``Best Practices for Convolutional Neural Networks Applied to Visual
 Document Analysis''
 
+``The most important practice is getting a training set as large as
+possible: we expand the training set by adding a new form of distorted
+data''.  They claim it's better even than being convolutional.  ``The
+optimal performance on MNIST was achieved using two essential
+practices.  First, we created a new, general set of elastic
+distortions that vastly expanded the size of the training set...''
+
+``We avoided using momentum, weight decay, structure-dependent
+learning rates, extra padding around the inputs, and averaging instead
+of subsampling. (We were motivated to avoid these complications by
+trying them on various architecture/distortions combinations and on a
+train/validation split of the data and finding they did not help.)''
+
+They have lots of useful details about how they came up with their
+convolutional architecture.  It's very similar to LeCun (1998), of
+course, but they have more detail on \emph{how} they chose the various
+parameters.  Interestingly, they found that having 5 features in the
+first convolutional layer and 50 features in the second convolutional
+layer was more or less optimal.
+
+``Convolutional neural networks have been proposed for visual tasks
+for many years [LeCun 1998], yet have not been popular in the
+engineering community.  We believe that is due to the complexity of
+implementing the convolutional neural networks.''
+
+They point out that implementation is complicated by the fact that not
+every unit has the same number of outgoing connections.
+
+The results suggest substantial improvements from both distortions,
+and the use of convolutional nets.  They achieve a best-possible
+accuracy of 99.6\%, which was apparently a record at the time.
+
 \section{Hinton and Salakhutdinov (2006)}
 
 \link{http://scholar.google.ca/scholar?cluster=15344645275208957628}{(link)}
