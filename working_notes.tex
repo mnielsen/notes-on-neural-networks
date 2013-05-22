@@ -675,6 +675,52 @@ space with the number of training cases.''  I don't quite understand
 the comment about mappings in both directions --- I thought the
 earlier work provided such mappings.  Perhaps I should look closer.
 
+\section{Jarrett (2009)}
+
+``What is the Best Multi-Stage Architecture for Object Recognition?'':
+\link{http://yann.lecun.com/exdb/publis/pdf/jarrett-iccv-09.pdf}{link}
+
+This is a much more conventional paper about object recognition than
+the material I've been reading.  The basic idea is to build a pretty
+good feature extractor, and then to use a standard (supervised)
+classifier.
+
+``We show that using non-linearities that include rectification and
+local contrast normalization is the single most important ingredient
+for good accuracy on object recognition benchmarks.''  ``[T]he SIFT
+operator applies oriented edge filters to a small patch and determines
+the dominant orientation through a winner-take-all operation.''
+``Several recognition architectures use a single stage of such
+features followed by a supervised classifier.''
+
+``At first glance, one may think that training a complete system in a
+purely supervised manner (using gradient descent) is bound to fail on
+dataset with small number of labeled samples such as Caltech-101,
+because the number of parameters greatly outstrips the number of
+samples.  [Yes, one might think this] One may also think that the
+filters need to be carefully hand-picked (or trained) to produce good
+performance [Yes, at least to the training part], and that the details
+of the non-linearity play a somewhat secondary role [Again, agreed].
+These intutitions, as it turns out, are wrong. [!]''
+
+``A common choice for the filter bank of the first stage is Gabor
+Wavelets.  [A linear filter used for edge detection.  Apparently there
+are similar things in the visual cortex!] Other proposals use simple
+oriented edge detection filters such as gradient operators, including
+SIFT, and HoG.  Another set of methods learn the filters by adapting
+them to the statistics of the input data with unsupervised
+learning. [This is the deep neural nets approach] ... The advantage of
+learning methods is that they provide a way to learn the filters in
+subsequent stages of the feature hierarchy.  While prior knowledge
+about image statistics point to the usefulness of oriented edge
+detectors at the first stage, there is no similar prior knowledge that
+would allow to design sensible filters for the second stage in the
+hierarchy.  Hence the second stage \emph{must be learned}.''  This
+seems overly pessimistic to me: one can certainly imagine a theory
+that tells us what features there should be at the second level.
+Still, it's obviously an attractive model.
+
+
 \section{Lee (2009) - video}
 
 \link{http://videolectures.net/icml09\_lee\_cdb/}{link} A video
@@ -1190,6 +1236,10 @@ single one is very, very good.
 
 
 \section{Future reading}
+
+Conference on learning representations: http://techtalks.tv/iclr2013/
+
+IPAM: https://www.ipam.ucla.edu/schedule.aspx?pc=gss2012
 
 \textbf{Lee and Mumford (2003):}
 \link{http://dash.harvard.edu/bitstream/handle/1/3637109/Mumford\_HierarchBayesInfer.pdf?sequence=1}{link}
