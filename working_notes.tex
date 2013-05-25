@@ -813,6 +813,99 @@ image.
 I will come back to the energy function a little later.  XXX.  We can
 do Gibbs sampling to generate the appropriate distributions.
 
+\section{Le, Karpenko et al (2011)}
+
+``ICA with Reconstruction Cost for Efficient Overcomplete Feature
+Learning'':
+\link{http://ai.stanford.edu/~ang/papers/nips11-ICAReconstructionCost.pdf}{link}
+
+ICA as a technique for unsupervised feature learning.  Point out that
+standard ICA learns orthonormal features, while they want overcomplete
+feature sets.  ``Using our method to learn highly overcomplete sparse
+features and tiled convolutional neural networks, we obtain
+competitive performances on a wide variety of object recognition
+tasks.  We achieve state-of-the-art test accuracies on the STL-10 and
+Hollywood2 datasets.''
+
+``Sparsity has been shown to work well for learning feature
+representations that are robust for object recognition.''  What
+exactly is a sparse feature?  I guess in the case of sparse
+autoencoders we only allow a relatively small number of hidden neurons
+to be on.  Algorithms for learning sparse features: sparse
+auto-encoders, RBMs, sparse coding, and ICA.
+
+``[Standard] ICA has two major drabacks.  First, it is difficult to
+learn \emph{overcomplete feature representations}''.  Goes on to claim
+that classification performance works better when features are
+overcomplete.  This makes a certain amount of sense: certainly, there
+should be no problem having overlapping features.  Also claims that
+ICA is sensitive to whitening, and this makes it difficult to scale
+ICA to high dimensional data.
+
+Regular ICA: Let $x^j$ be training data.  Choose a penalty function
+$g(\cdot)$.  They suggest $g(z) = \log(\cosh(z))$.  Let $W_j$ be a row
+in a weight matrix.  Then $W_j x^k$ measures the overlap between the
+weight vector and the training data.  If it's one, then $x^k$ is very
+much like the weight vector.  And if it's less than one, then it's
+less so.  So we simply sum over features, $W_j$, and over training
+data, $x^k$.  The goal is to ``find the best features'', i.e., to
+minimize:
+\begin{eqnarray}
+  \sum_{jk} g(W_j x^k).
+\end{eqnarray}
+This is done subject to the constraint that $WW^T = I$, i.e., the
+feature vector are orthonormal to one another.  ICA is done assuming
+zero mean for the training data, $\sum_k x^k = 0$, and unit
+covariance, $\sum_k x_k x_k^T = m I$.  This is achieved by whitening
+the data.
+
+Reconstruction ICA (RICA): Minimize:
+\begin{eqnarray}
+  \frac{\lambda}{m} \sum_k \| W^T W x^k - x^k\|^2 + \sum_{jk} g(W_j x^k).
+\end{eqnarray}
+In other words, find the features which minimize the cost, while
+preserving the training data pretty well.  ``We use the term
+`reconstruction cost' for this smooth pentalty because it corresponds
+to the reconstruction cost of a linear autoencoder, where the encoding
+weights and decoding weights are tied''.  Note that tying is not used
+in the LRM paper.  This makes it more similar to a standard
+autoencoder, as I've described elsewhere in my book.
+
+``ICA's main distinction compared to sparse coding and autoencoders is
+its use of the hard orthonormality constraint in lieu of
+reconstruction costs.''  The basic idea in proving some kind of
+equivalence is to let $\lambda$ be large.  ``If the data is whitened,
+RICA is equivalent to ICA for undercomplete representations and
+$\lambda$ approaching infinity.''
+
+From my point of view, the main thing here is simply the basic problem
+formulation: the function to minimize.  I'd like to think of this in a
+slightly more connectionist fashion.  Let me think back to the cost
+function.  Minimizing the first part means that we have weights which
+allow us to approximately reconstruct the training data.  Minimizing
+the second part is more an l1 constraint, roughly speaking it's
+telling us to have few features.  So we have features which let us
+reconstruct, and we are likely to have only a few features at a time.
+
+Local receptive field TICA: ``[L]ocal receptive field neural networks
+are faster to optimize than their fully connected counterparts
+[because they have fewer parameters].  A major drawback of this
+approach, however, is the difficulty in enforcing orthogonality across
+partially overlappling patches.  [This becomes a severe constraint if
+we only overlap at a few points.]  We show that swapping out locally
+enforced orthogonality constraints with a global reconstruction cost
+solves this issue. [I.e., we can forget about local orthogonality, and
+just worry about optimizing the cost.]''  It seems that they do this
+by minimizing the following function:
+\begin{eqnarray}
+  \sum_k \| W^T W x^k-x^k\|^2+ \sum_{jk} \sqrt{\epsilon+H_j (Wx^k)^2}.
+\end{eqnarray}
+A few things: (1) $\lambda$ should presumably appear out the front of
+the first term; (2) They never explain $\epsilon$; (3) The $H_j$ are
+pooling matrices; (4) It's not clear what $(Wx^k)^2$ means ---
+presumably the elementwise square; (5) I don't see how $H_j (Wx^k)^2$
+can be a scalar.
+
 \section{Tenenbaum, Kemp, Griffiths, and Goodman (2011)}
 
 \link{http://scholar.google.ca/scholar?cluster=2667398573353002097&hl=en&as_sdt=0,5}{(link)}
@@ -1233,6 +1326,29 @@ error rate: 17.0 percent.  That seems incredibly good, although not
 human comparable.  They also report a bunch of other results: every
 single one is very, very good.
 
+\section{Le (2012), video}
+
+``Tera-scale deep learning'': \link{http://vimeo.com/52332329}{link}
+
+Problems with standard hand-crafted features: the features may not
+generalize to another domain; the features take a long time to
+develop.  (Recall Hinton: the time of hand-engineered features is
+over.)  ``We're still stuck at SIFT and HOG''.  
+
+RICA: Built on TICA (topographic independent component analysis).  We
+have some data, $x^i$.  Take a 3 by 
+
+RICA can learn from any (unlabelled) data.  Can learn features from
+videos to do action recognition.  E.g. ``Get out of car''.  ``Eat''.
+And so on.  Very interesting features!  SIFT / HoG is also used for
+video, apparently.
+
+Four most famous activity recognition data sets: KTH.
+Hollywood2. UCF. YouTube.  They outperform SIFT / HoG on four
+best-known data sets.
+
+On cancer / MRI: our usual intuition breaks down.  It really helps to
+be able to automatically discover features.
 
 
 \section{Future reading}
