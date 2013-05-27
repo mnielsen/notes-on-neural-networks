@@ -813,6 +813,171 @@ image.
 I will come back to the energy function a little later.  XXX.  We can
 do Gibbs sampling to generate the appropriate distributions.
 
+\section{Coates (2011)}
+
+\link{http://www.stanford.edu/~acoates/papers/coatesleeng\_aistats\_2011.pdf}{An
+  Analysis of Single-Layer Networks in Unsupervised Feature Learning}
+
+``In this paper... we show that several simple factors, such as the
+number of hidden nodes in the model, may be more important to
+achieving high performance than the learning algorithm or the depth of
+the model... Our results show that large numbers of hidden nodes and
+dense feature extraction are critical to achieving high performance.''
+They actually get state-of-the-art performance using only a single
+layer of features.  This is interesting: it's a case where deep
+learning \emph{doesn't} help.  But increasing the number of features
+\emph{does} help --- a lot!
+
+Reviews the standard practice: use unsupervised learning to pre-train
+multiple layers of features.  
+
+``Even with very simple algorithms and a single layer of features, it
+is possible to achieve state-of-the-art performance by focusing effort
+on these choices [number of features, dense feature extraction,
+whitening] rather than on the learning system itself.''
+
+``[W]e employ very \emph{simple} learning algorithms and then more
+carefully choose the network parameters in search of higher
+performance.  If (as is often the case) larger representations perform
+better, then we can leverage the speed and simplicity of these
+learning algorithms to use larger representations.''
+
+CIFAR-10: 60,000 32 by 32 colour images in 10 classes, with 6,000
+images per class.  There are 50,000 training images and 10,000 test
+images.  CIFAR-10 is a subset of the ``80 million tiny images''
+dataset.
+
+CIFAR-100: Like CIFAR-10, but with 100 classes containing 600 images
+each.  I.e., CIFAR-100 is a more difficult problem.
+
+So the CIFAR data sets can be thought of as small but challenging
+class recognition data sets.
+
+``It will turn out that whitening, large numbers of features, and
+small stride lead to uniformaly better performance regardless of the
+choice of unsupervised learning algorithm... the main contribution of
+our work is in demonstrating that these considerations may, in fact,
+be \emph{critical} to the success of feature learning algorithms ---
+potentially more important even than the choice of unsupervised
+learning algorithm.  Indeed, it will be shown that when we push these
+parameters to their limits that we can achieve state-of-the-art
+performance, outperforming many other more complex algorithms on the
+same tasks.''
+
+This really makes me wonder about the standard claims made about deep
+learning.
+
+``Since the introduction of unsupervised pre-training, many new
+schemes for stacking layers of features to build `deep'
+representations have been proposed.  Most have focused on creating new
+training algorithms to build single-layer models that are composed to
+build deeper structures.  Among the algorithms considered in the
+literature are [long list].  Thus, amongst the many components of
+feature learning architectures, the unsupervised learning module
+appears to be the most heavily scrutinized.''
+
+``Some work, however, has considered the impact of other choices in
+these feature learning systems, especially the choice of network
+architecture.  Jarret et al. [11], for instance, have considered the
+impact of changes to the ``pooling'' strategies frequently employed
+between layers of features, as well as different forms of
+normalization and rectification between layers.''  One reason this is
+interesting is that it suggests a direction in which to take work.
+
+``While we confirm that some feature-learning schemes are better than
+others, we also show that the differences can often be outweighted by
+other factors, such as the number of features.  Thus, even though more
+complex learning schemes may improve performance slightly, these
+advantages can be overcome by fast, simple learning algorithms that
+are able to handle larger networks.''  [It'd be nice to know more
+about the impact of changed data set size as well.]  Summing up: more
+sophisticated algorithms may not be as useful as increasing the basic
+parameters in a simple algorithm.  But given this, I'd like to know
+why Ng used a deep RICA network in his later work?
+
+``At a high-level [\emph{sic}], our system performs the following
+steps to learn a feature representation: 1. Extract random patches
+from unlabeled training images.  2. Apply a pre-processing stage to
+the patches. 3. Learn a feature-mapping using an unsupervised learning
+algorithm. [So this is how we learn the features to be used.  Now we
+move to classification.]  Given the learned feature mapping and a set
+of labeled training images we can then perform feature extraction and
+classification: 1. Extract features from equally spaced sub-patches
+[why equally spaced? why use sub-patches?] covering the input image.
+2. Pool features together over regions of the input image to reduce
+the number of feature values. [I guess this makes sense if we're using
+small local features, as does the use of sub-patches.]  3. Train a
+linear classifier to predict the labels given the feature vectors.''
+
+``It is common practice to perform several simple normalization steps
+before attempting to generate features from data.  In this work, we
+assume that every patch $x^{(i)}$ is normalized by subtracting the
+mean and dividing by the standard deviation of its elements.  For
+visual data, this corresponds to local brightness and contrast
+normalization.''
+
+``For our purposes, we will view an unsupervised learning algorithm as
+a `black box' that takes the [training] dataset $X$ and outputs a
+function $f : R^N \rightarrow R^K$ that maps an input vector $x^{(i)}$
+to a new feature vector of $K$ features, where $K$ is a parameter of
+the algorithm.''  
+
+After learning features, they do a type of convolutional extraction:
+basically, stepping across the images with a particular stride length,
+and extracting $K$-dimensional features at each stage.
+
+They do a funny form of pooling.  They split their features up into
+four quadrants, and simply sum over each quadrant.  That gives them a
+total of $4K$ features to use for classification.  I must admit, this
+seems to me like a rather strange procedure to use.  They don't appear
+to discuss it at much length. 
+
+After pooling they use a linear classifier --- an SVM, with the
+regularization parameter determined by cross-validation.
+
+``For sparse autoencoders and RBMs, the effect of whitening is
+somewhat ambiguous.  When using only 100 features, there is a
+significant benefit of whitening for sparse RBMs, but this advantage
+disappears with larger numbers of features.  For the clustering
+algorithms, however, we see that whitening is a crucial pre-process
+since the clustering algorithms cannot handle the correlations in the
+data.''
+
+Whitening made a big difference for both k-means measures, and for
+Gaussian mixture models.  It made only a small difference for the
+sparse autoencoder and for the RBM.
+
+The number of features made a big difference for all approaches.  It's
+not clear what the asymptotic performance will be, but even with 1600
+features (where they stopped) things were still improving quite a bit.
+
+The stride length also had a huge impact on performance.  I find this
+really interesting!  It'd be interesting to understand the performance
+tradeoffs.
+
+Size of the local receptive field didn't have quite as much of an
+impact.  Indeed, increasing the size sometimes decreased performance,
+when other factors (e.g., number of features) was held constant.  
+
+They got the best known results on CIFAR 10 using k-means.  (Note that
+this has since been greatly improved.)
+
+``Our results above may seem inexplicable considering the simplicy of
+the system --- it is not clear, on first inspection, exactly what in
+our experiments allows us to achieve such high performance compared to
+prior work.... Each of the network parameters (feature count, stride
+and receptive field size) we've tested potentially confers a
+significant benefit on performance.  For instance, lare numbers of
+features (regardless of how they're trained) gives us many non-linear
+projections of the data... using extremely large numbers of non-linear
+projections can make data closer to linearly separable and thus easier
+to classy.  [E.g., the kernel trick] Hence, larger numbers of features
+may be uniformly beneficial, regardless of the training algorithm''
+
+``It appears that large receptive fields result in a space that is
+simply too large to cover effectively with a small number of nonlinear
+features.''
+ 
 \section{Le, Karpenko et al (2011)}
 
 ``ICA with Reconstruction Cost for Efficient Overcomplete Feature
@@ -1350,8 +1515,13 @@ best-known data sets.
 On cancer / MRI: our usual intuition breaks down.  It really helps to
 be able to automatically discover features.
 
+``Scaling up deep RICA'': This is the way to think about what the
+Google-Stanford paper does.
+
 
 \section{Future reading}
+
+\textbf{Hinton et al (2006):}
 
 Conference on learning representations: http://techtalks.tv/iclr2013/
 
@@ -1448,6 +1618,16 @@ same number of neurons as a shallow neural network?
 
 \emph{Question:} Can we identify outlier training data by looking for
 gradient vectors that are unusual?
+
+\emph{Question:} What, if anything, does all this have to do with
+embodied cognition?  The notion of training seems like a very pure
+version of embodied cognition, with much of the messiness of the world
+removed.
+
+\emph{Question:} Coates \emph{et al} (2011) suggests that the main
+thing in image recognition is simply the number of features learnt.
+In particular, it makes me wonder to what extent that can be traded
+off against depth.  How can we compare the two?
 
 \chapter{Miscellanea}
 
