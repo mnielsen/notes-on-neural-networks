@@ -1525,6 +1525,22 @@ be able to automatically discover features.
 ``Scaling up deep RICA'': This is the way to think about what the
 Google-Stanford paper does.
 
+``Using a thousand machines alone is not enough.''  They needed to
+change their algorithms.  
+
+``Higher layer [i.e., later features] are very difficult to
+visualize.''  I don't understand why that is the case.
+
+Two main ideas in scaling up: local connectivity; asynchronous SGD.  
+
+1 billion parameters.  I wonder how they avoid overfitting?
+
+They pick out a neuron in the top layer.  They look to see: which
+images in the test (?) set stimulate that neuron the most?  And then
+they do a numerical optimization to figure out what the optimal input
+stimulus is.
+
+Classify ``sting ray'' versus ``manta ray'' in ImageNet.
 
 \section{Future reading}
 
