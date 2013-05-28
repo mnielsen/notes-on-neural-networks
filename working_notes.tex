@@ -633,6 +633,58 @@ The results suggest substantial improvements from both distortions,
 and the use of convolutional nets.  They achieve a best-possible
 accuracy of 99.6\%, which was apparently a record at the time.
 
+\section{Hinton, Osindero, and Teh (2006)}
+
+\link{http://www.cs.toronto.edu/\~hinton/absps/ncfast.pdf}{A Fast
+  Learning Algorithm for Deep Belief Nets}
+
+``Learning is difficult in densely connected, directed belief nets
+that have many hidden layers because it is difficult to infer the
+conditional distribution of the hidden activities when given a data
+vector.'' I don't know why this is.  My impression is that it's easy
+to at least sample from the distribution of hidden activations.  Is
+that false?  Or maybe it's true and it's just the calculation of the
+distribution that is hard.  ``Variatonal methods use simple
+approximations to the true conditional distribution, but the
+approximations may be poor, especially at the deepest hidden layer,
+where the prior assumes independence.  Also, variational learning
+still requires all of the parameters to be learned together and this
+makes the learning time scale poorly as the number of parameters
+increase.''  I don't know what variational learning is.
+
+``The network used to model the join distribution of digit images and
+digits labels... work in progress has shown that the same learning
+algorithm can be used if the `labels' are replaced by a multilayer
+pathway whose inputs are spectrograms from multiple different speakers
+saying isolated digist.  The network then learns to generate pairs
+that consist of an image and a spectrogram of the same digit class.''
+Fascinating: in other words, it will associate ``9'' both with
+different images of 9, and also with different people saying 9.
+
+Discriminative model: a model which can be used to distinguish the
+MNIST digits.  Generative model: a model which, given a label, can be
+used to generate an image which in some sense samples from the MNIST
+distribution.  
+
+Generative models seems interesting in part because that's what we do
+(we can both read and write digits, for instance).  Of course, it's
+not entirely clear how these skills are associated.  One can learn to
+read without also learning to write; there are fine motor skills in
+the latter that are not all that closely associated to reading.
+
+``There is a fine-tuning algorithm that learns an excellent generative
+model that outperforms discriminative methods on the MNIST database of
+hand-written digits.''  I haven't seen this kind of thing mentioned at
+all in later work --- it's all discriminative.
+
+``The learning algorithm is local.  Adjustments to a synapse strength
+depend on only the states of the presynaptic and postsynaptic
+neuron.''  This seems very preferable to gradient descent!
+
+\textbf{Explaining away:} Makes inference difficult in directed belief
+nets.  Basically, we can't figure out what root causes must have been,
+given only partial evidence.
+
 \section{Hinton and Salakhutdinov (2006)}
 
 \link{http://scholar.google.ca/scholar?cluster=15344645275208957628}{(link)}
@@ -1651,6 +1703,11 @@ removed.
 thing in image recognition is simply the number of features learnt.
 In particular, it makes me wonder to what extent that can be traded
 off against depth.  How can we compare the two?
+
+\emph{Question:} Given the MNIST images, can we easily figure out that
+there are 10 separate classes, without labels?  I presume that there
+are clustering algorithms which can do this, but I must admit that I
+don't know the answer.
 
 \chapter{Miscellanea}
 
