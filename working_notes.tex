@@ -1449,9 +1449,85 @@ merely because there is some kind of universality theorem for them.
 Correlation does not imply causation: Keep it in mind when
 interpreting the results of machine learning algorithsm.
 
+\section{Hinton (2012) - videos}
+
+\link{https://www.ipam.ucla.edu/schedule.aspx?pc=gss2012}{IPAM Summer School videos}
+
+Attributes backprop to \link{http://www.werbos.com/}{Paul Werbos}.  It
+was done in his 1974 PhD thesis.  Hinton also lists several others,
+including Amari, Parker, and LeCun.  Points out that deep learning
+didn't work well, except in time delay and convolutional networks.
+Says that part of the reason Werbos was ignored was because he was
+applying backprop to econometrics, where it was hard to see the value.
+
+Why deep learning is feasible today: He starts with simple raw speed,
+not pre-training, interestingly enough.  He also says that there's
+been a ``small improvement in the theory''.  Says the biggest
+disappointment with backprop was that it didn't work with recurrent
+neural nets.  I don't understand how this squares with Williams and
+Zipser.  
+
+``On the whole backpropagation fell out of favour because it failed to
+be able to learn multiple layers of features.''  Says that
+convolutional nets were the only ones where deep learning worked.
+
+``Almost everything I used to believe about backpropagation is
+wrong.''
+
+``What is wrong with back-propagation?  It requires labeled training
+data. [Well, no, not if you use ideas like autoencoders.]''
+
+Why is the learning time slow in deep nets?  If you use the right
+scales for the weights, you can do some of this learning much faster.
+
+He's strongly emphasizing the unsupervised learning / feature learning
+point of view.  Basically, pretraining to initialize, and then
+fine-tuning with labelled data and backprop.
+
+``You can get a lot of knowledge into the network by messing with the
+training data.''  Analogizes to education.  
+
+On the advantages of generative models: learn $p({\rm image})$, not
+$p({\rm label | image})$.  ``If you want to do computer vision, first
+learn computer graphics.''  I think that overstates the case, but
+there's something to it.  Reminiscent of the idea that learning is
+really memory.
+
+\textbf{Belief nets:} A directed acyclic graph of stochastic
+variables.  We learn the values of some variables.  We'd like to infer
+the states of the other variables.  And we'd like to adjust the
+interactions between variables to make the network more likely to
+generate the observed data.  (Obviously, this is all very close to
+Pearl's causal models.)
+
+Neat point about stochastic models: it lowers the communication cost
+in distributed models.  Send 1 bit instead of 32 or 64 bit float.
+
+Points out that while it's easy to generate examples at the leaf
+nodes, it's hard to infer causes.  Yet that's exactly what we want to
+do.
+
+Suppose we observe some output data.  Let's suppose we can sample the
+hidden states in an unbiased fashion.  Now update the weight by
+$\Delta w_{ji} = \eta s_j (s_i-p_i)$.  Note that here, $j$ is a
+parent, and $i$ is a child node.  This is more or less Hebb's rule.
+``Nice local learning rule''.
+
+Monte Carlo methods: painfully slow for large, deep models.  Can be
+used to sample from the posterior.  Variational methods are much
+faster.  You get the wrong result, but it's bounded away from the
+right result.  ``Inferring the wrong posterior and then doing learning
+anyway''.
+
+RBMs: The feature detectors are genuinely independent (given the
+data).  The posterior distribution is easy to sample from.  The
+partition function makes learning difficult.  He derives a nice quick
+way to learn an RBM: $\Delta w_{ij} = \eta *$ a difference of
+averages of correlations between visible and hidden units.
+
 \section{Krizhevsky (2012)}
 
-\link{http://www.cs.toronto.edu/~hinton/absps/imagenet.pdf}{link} 1.2
+\link{http://www.cs.toronto.edu/\~hinton/absps/imagenet.pdf}{link} 1.2
 million images in ImageNet 2010.  1000 classes.  650,000 neurons.
 Five convolutional layers.  Max pooling layers.  Three fully-connected
 layers.  1000-way softmax.  Used dropout to prevent overfitting.
