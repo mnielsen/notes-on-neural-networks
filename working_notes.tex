@@ -1670,7 +1670,63 @@ stimulus is.
 
 Classify ``sting ray'' versus ``manta ray'' in ImageNet.
 
+\section{Ng (2012) --- video}
+
+\link{https://www.ipam.ucla.edu/schedule.aspx?pc=gss2012}{Ng's
+  contribution to 2012 IPAM workshop}
+
+``Instead of doing AI, we ended up spending our lives doing curve
+fitting.''
+
+Has a nice example of building a motorcycle recognizer by building a
+feature classifier to determine whether there are wheels or
+handlebars, and then adding an extra classifier layer.  There's
+actually a general story here: we can recursively do this.
+
+He makes stronger claims about the brain rewiring (e.g., in ferrets)
+than I've heard before.  Says that it's been done in four animal
+species.  (I wasn't immediately able to find this using Google
+Scholar, it'd be interesting to see sources.)  Also says that it's
+vision in every sense that he understands what vision means.  I must
+admit I didn't get that out of Sur's original paper --- it seemed like
+a much coarser sense of vision.  It'd be interesting to know if
+finer-grained tests have since been done.
+
+``The complexity of the trained algorithm comes from the data, not the
+algorithm.''
+
+Distinguishes semi-supervised versus self-taught learning
+(unsupervised feature learning).  The problem with semi-supervised
+learning is that it requires some broad constraints on classses ---
+e.g., we need all images to be of cars or motorcycles.  Self-taught
+learning is much easier.
+
+Sparse coding: Learns a dictionary of basis functions so that each
+training image can be decomposed sparsely in terms of basis functions.
+(Use a ``sparsity penalty term''.)  If you train sparse coding on
+natural images you get edge detectors.  ``It's more useful to know
+where the edges are in an image than where the pixels are.''  ``It
+gives us an alternate way of representing the image.''  ``ICA version
+of spare coding.''  Recursively do sparse coding.
+
+Sparse deep belief network (Honglak Lee).  One layer: edges.  Second
+layers: models of object parts.  Third layers: object models.  
+
+Ng believes it is mostly scalability that is the issue.  More
+features, more data => better results.  What appears superficially to
+be an algorithmic superiority is really about the availablity of more
+data, or more computational power that allows more features to be
+learned.
+
 \section{Future reading}
+
+\textbf{SIFT:}
+
+\textbf{Erhan:} ``Why does unsupervised pre-training help deep learning?''
+
+\textbf{Collobert on natural language}
+
+\textbf{HoG:}
 
 \textbf{Hinton et al (2006):}
 
@@ -1784,6 +1840,10 @@ off against depth.  How can we compare the two?
 there are 10 separate classes, without labels?  I presume that there
 are clustering algorithms which can do this, but I must admit that I
 don't know the answer.
+
+\emph{Question:} Learning from a single training instance.  Suppose we
+do unsupervised feature learning with images.  Then we see a single
+``9''.  Can we use that single 9 to learn to recognize future 9s?
 
 \chapter{Miscellanea}
 
