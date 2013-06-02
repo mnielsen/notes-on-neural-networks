@@ -1776,27 +1776,49 @@ NAG: Nesterov's Accelerated Gradient.  ``[F]or general smooth
 achieves a gloabl convergence rate of $O(1/T^2)$ (versus the $O(1/T)$
 of gradient descent), with constant proportional to the Lipschitz
 coefficient of the derivative and the squared Euclidean distance to
-the solution.''  NAG turns out to be a variation on the momentum
-method, with the only difference being that we compute the gradient at
-the updated position.  ``While the classical convergence theories for
-both methods [NAG and momentum] rely on noiseless gradient estimates
-(i.e., not stochastic), with some care in practice they are both
-applicable to the stochastic setting.''  ``However, the theory
-predicts that any advantages in terms of asymptotic local rate of
-convergence will be lost... a result also confirmed in
-experiments... For these reasons, interest in momentum methods
-diminished after they had received substantial attention in the 90's.
-And because of this apparenty incompatability with stochastic
-optimization, some authors even discourage using momentum or downplay
-its potential advantages''
+the solution.''  I don't know what $T$ is here.  NAG turns out to be a
+variation on the momentum method, with the only difference being that
+we compute the gradient at the updated position.  ``While the
+classical convergence theories for both methods [NAG and momentum]
+rely on noiseless gradient estimates (i.e., not stochastic), with some
+care in practice they are both applicable to the stochastic setting.''
+``However, the theory predicts that any advantages in terms of
+asymptotic local rate of convergence will be lost... a result also
+confirmed in experiments... For these reasons, interest in momentum
+methods diminished after they had received substantial attention in
+the 90's.  And because of this apparenty incompatability with
+stochastic optimization, some authors even discourage using momentum
+or downplay its potential advantages''
 
 The key point seems to be to separate out two timescales.  One is the
 initial transient phase, when we're still hopping between regions of
 different local minima, before the phase of fine local convergence.
-``[I]n ractice, the ``transient phase''... seems to matter a whole lot
-more for optimizing deep neural networks.''
+``[I]n ractice, the `transient phase'... seems to matter a whole lot
+more for optimizing deep neural networks.  In this transient phase of
+learning, directions of reduction in the objective tend to persist
+across many successive gradient estimates and are not completely
+swamped by noise.''  ``Thus, for convex objectives, momentum-based
+methods will outperform SGD in the early or transient stages of the
+optimization where $L/T$ is the dominant term.''  Here, $L$ is the
+Lipshitz coefficient of the gradient.
 
+Why NAG works: ``This benign-looking difference seems to allow NAG to
+change $v$ in a quicker and more responsive way, letting it behave
+more stably than CM [classical momentum[ in many situations,
+especially for higher values of $\mu$.  Indeed, consider the situation
+where the addition of $\mu v_t$ results in an immediate undesirable
+increase in the objective $f$.  The gradient correction to the
+velocity $v_t$ is computed at position $\theta_t + \mu v_t$ and if
+$\mu v_t$ is indeed a poor update, then [the gradient at the new
+position] will point back toward $\theta_t$ more strangly than [the
+gradient at the old position], thus providing a larger and more timely
+correction to $v_t$ than CM.''  I don't think this is quite right.
+It's not a question of pointing back to the original position.  It's a
+question of pointing in the right direction, which may be different
+than the direction of the original position. Still, this line of
+reasoning otherwise seems sound.
 
+Why not do a double iteration?
 
 \section{Future reading}
 
