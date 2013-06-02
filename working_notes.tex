@@ -1718,9 +1718,93 @@ be an algorithmic superiority is really about the availablity of more
 data, or more computational power that allows more features to be
 learned.
 
+Should we use higher-order algorithms?  Conjugate gradient?  L-BFGS.
+Gradient descent with line search.  Black-box algorithms which will
+take the gradient and cost and just work.  Ng's favourite: L-BFGS.
+
+``The most reliable indicator of whether [a new grad student] has got
+gradient descent to work is whether they do gradient checking.''  The
+problem: buggy implementations will learn.  Just not as well as a
+correct implementation.
+
+\section{Sutskever (2013)}
+
+\link{http://www.cs.utoronto.ca/\~ilya/pubs/2013/1051_2.pdf}{On the
+  importance of initialization and momentum in deep learning}
+
+``Deep and recurrent neural networks... are poweful models that were
+considered to be almost impossible to train using stochastic gradient
+descent with momentum.  In this paper, we show that when sotchastic
+gradient descent with momentum uses a well-designed random
+initialization and a particular type of slowly increasing schedule for
+the momentum parameters, it can train both... to levels of performance
+that were previously achievable only with Hessian-Free optimization.
+We find that both the initialization and the momentum are crucial
+since poorly initialized networks cannot be trained with momentum and
+well-initialized networks perform markedly worse when the momentum is
+absent or poorly tuned.  Our success training these models suggests
+that previous attempts to train deep and recurrent neural networks
+from random initializations have likely failed due to poor
+initialization schemes.''  In other words, we can train deep neural
+nets with (momentum-based) stochastic gradient descent,
+\emph{provided} we're careful about how we initialize the weights, and
+provided we do the appropriate things with the momentum.
+
+``Martens (2010) attracted considerable attention by showing
+that... Hessian-free Optimization... is capable of training [deep
+neural nets] from certain random initializations without the use of
+pre-training, and can achieve lower errors for the various
+auto-encoding tasks considered by Hinton and Salakhutdinov (2006).''
+
+The picture that is starting to appear: Overall achievement = Quality
+of algorithm + quantity of data + number of features + amount of
+computing time.
+
+``The first contribution of this paper is a much more thorough
+investigation of the difficulty of training deep and temporal networks
+than has been previously done... We show that while a definite
+performance gap seems to exist between plain SGD and HF on certain
+deep and temporal learning problems, this gap can be eliminated or
+nearly eliminated... by careful use of classical momentum methods or
+Nesterov's accelerated gradient.''
+
+Apparently Polyak introduced the momentum technique, and obtained some
+results on how much faster they can be than position-based techniques.
+
+NAG: Nesterov's Accelerated Gradient.  ``[F]or general smooth
+(non-strongly) convex functions and a deterministic gradient, NAG
+achieves a gloabl convergence rate of $O(1/T^2)$ (versus the $O(1/T)$
+of gradient descent), with constant proportional to the Lipschitz
+coefficient of the derivative and the squared Euclidean distance to
+the solution.''  NAG turns out to be a variation on the momentum
+method, with the only difference being that we compute the gradient at
+the updated position.  ``While the classical convergence theories for
+both methods [NAG and momentum] rely on noiseless gradient estimates
+(i.e., not stochastic), with some care in practice they are both
+applicable to the stochastic setting.''  ``However, the theory
+predicts that any advantages in terms of asymptotic local rate of
+convergence will be lost... a result also confirmed in
+experiments... For these reasons, interest in momentum methods
+diminished after they had received substantial attention in the 90's.
+And because of this apparenty incompatability with stochastic
+optimization, some authors even discourage using momentum or downplay
+its potential advantages''
+
+The key point seems to be to separate out two timescales.  One is the
+initial transient phase, when we're still hopping between regions of
+different local minima, before the phase of fine local convergence.
+``[I]n ractice, the ``transient phase''... seems to matter a whole lot
+more for optimizing deep neural networks.''
+
+
+
 \section{Future reading}
 
 \textbf{SIFT:}
+
+\textbf{Bengio et al (1994):} The vanishing gradient problem.
+``Learning long-term dependencies with gradient descent is
+difficult''.
 
 \textbf{Erhan:} ``Why does unsupervised pre-training help deep learning?''
 
@@ -1780,13 +1864,12 @@ faces without labels.
 \textbf{To do:} Contrastive divergence
 (http://learning.cs.toronto.edu/~hinton/absps/cdmiguel.pdf and
 http://www.cs.utoronto.ca/~hinton/absps/nccd.pdf ). LeCun 1998
-``Efficient BackProp''.  Dropout.  Maxout. Domingos CACM12.  Andrew
-Ng's 1997 paper ``Preventing overfitting of cross-validation data''.
-Blumer \emph{et al} with guarantees on induction:
+``Efficient BackProp''.  Dropout.  Maxout.  Andrew Ng's 1997 paper
+``Preventing overfitting of cross-validation data''.  Blumer \emph{et
+  al} with guarantees on induction:
 (http://scholar.google.ca/scholar?cluster=11895938102761137877\&hl=en\&as\_sdt=0,5).
 Would be good to understand this in conjunction with no free lunch.
-NIPS papers are online.  IPAM: https://www.ipam.ucla.edu/schedule.aspx?pc=gss2012
-
+NIPS papers are online.  
 
 \chapter{Questions and ideas}
 
@@ -1844,6 +1927,10 @@ don't know the answer.
 \emph{Question:} Learning from a single training instance.  Suppose we
 do unsupervised feature learning with images.  Then we see a single
 ``9''.  Can we use that single 9 to learn to recognize future 9s?
+
+\emph{Question:} Why not use hybrid optimization methods: say,
+momentum-based stochastic gradient descent for the initial transient
+phase, followed by some other method for the final fine-tuning?
 
 \chapter{Miscellanea}
 
