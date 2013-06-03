@@ -1877,7 +1877,47 @@ The schedule for $\mu$ which they used was to look for the smaller of
 $\mu_{\rm max}$ and $1-1/2(\lfloor t/250 \rfloor +1)$, where $t$ is
 the epoch number.  In other words, over the first 250 iterations, $\mu
 = 1/2$.  Then we switch to $3/4$.  Then to $5/6$.  And so on, until we
-get to $\mu_{\rm max}$.
+get to $\mu_{\rm max}$.  They have a nice explanation for this.
+Basically, use the $1-1/t$ type schedule when the function isn't
+convex --- this will helps us explore and gradually find a good
+locality.  But once that is found it's better to switch to a constant
+rate, which will converge exponentially quickly.  So this is a nice
+hybrid.  
+
+Actually, that's not quite the full schedule.  It turns out that they
+do a final modification of $\mu$ for the tail end of training,
+reducing it to another constant.  They have a nice heuristic
+explanation for this, which I won't get into here, but should perhaps
+come back to in future.
+
+The results are impressive: much, much better than basic stochastic
+gradient descent.
+
+They also investigate recurrent neural networks.  I'm less familiar
+with these, so I'll just quickly write out some very telegraphic and
+incomplete notes.  Echo-state networks.  ``ESNs ... have achieved high
+performance on tasks with long range dependencies (?)''  ``RNNs were
+believed to be almost impossible to successfully train on such
+datasets [with long-range temporal dependencies], due to various
+difficulties such as vanishing/exploding gradients'' Interesting
+comments on the spectral radius of the hidden-to-hidden matrix on the
+dynamics of a RNN.  When are RNNs likely to be useful?  ``The main
+achievement of these results is a demonstration of the ability of
+momentum methods to cope with long-range temporal dependency training
+tasks to a level which seems sufficient for most practical purposes.''
+In practice, of course, many (most?) interesting human cognitive tasks
+involve long-range temporal dependency: I do action X now, then must
+do Y later, than Z (which depends on X) later still, and so on.  RNNs
+seem like they might be especially useful for ``chains of thought'' as
+opposed to pattern recognition.
+
+
+
+
+
+
+
+
 
 
 \section{Future reading}
@@ -1885,6 +1925,8 @@ get to $\mu_{\rm max}$.
 \textbf{SIFT:}
 
 Martens 2010: Hessian-Free optimization, and sparse initialization.
+
+Bengio 2007 on autoencoders.
 
 \textbf{Collobert:} ``Natural language processing almost from scratch:''
 
@@ -1957,92 +1999,6 @@ http://www.cs.utoronto.ca/~hinton/absps/nccd.pdf ). LeCun 1998
 Would be good to understand this in conjunction with no free lunch.
 NIPS papers are online.  
 
-\chapter{Questions and ideas}
-
-\textbf{Idea: oversampling of outliers:} This is done using online
-training.  The idea is to gradually identify outliers, and to up the
-probability with which they are sampled.  What's a natural way of
-doing this?  What's going on is that we have costs for a large number
-of different training examples.  And we'd like to spend more time on
-those examples where we do worse.  
-
-Idea: We could try using the cost as an inverted energy.  SO we tend
-to spend more time in states which are high-cost / low-energy.  The
-idea is to associate an energy to each training example: $E = E(x)$.
-Then we sample the training examples according to the Boltzmann
-distribution.  For each sample we apply backprop to update the
-weights.  So we get a new energy.  Then we sample again.  And so on.
-We start at a high temperature, which means we spend about the same
-amount of time on all training data.  But then we gradually lower the
-temperature, so we're spending more time on outliers.  The problem
-with this approach is that it requires us to calculate lots of
-probabilities.  However, it might be possible to use an expander
-construction to do some kind of local sampling which would, however,
-remain rapidly mixing.
-
-\emph{Question:} Might we do better using something apart from the
-$\sigma$ function?
-
-\emph{Question:} Could we try doing gradient descent on the squashing
-function as well?  For instance, we could use a linear combination $p
-\sigma_1+(1-p) \sigma_2$ of two squashing functions, and do gradient
-descent on the value of $p$ to see what is the best possible squashing
-function.
-
-\emph{Question:} Is it harder to train a deep neural network with the
-same number of neurons as a shallow neural network?
-
-\emph{Question:} Can we identify outlier training data by looking for
-gradient vectors that are unusual?
-
-\emph{Question:} What, if anything, does all this have to do with
-embodied cognition?  The notion of training seems like a very pure
-version of embodied cognition, with much of the messiness of the world
-removed.
-
-\emph{Question:} Coates \emph{et al} (2011) suggests that the main
-thing in image recognition is simply the number of features learnt.
-In particular, it makes me wonder to what extent that can be traded
-off against depth.  How can we compare the two?
-
-\emph{Question:} Given the MNIST images, can we easily figure out that
-there are 10 separate classes, without labels?  I presume that there
-are clustering algorithms which can do this, but I must admit that I
-don't know the answer.
-
-\emph{Question:} Learning from a single training instance.  Suppose we
-do unsupervised feature learning with images.  Then we see a single
-``9''.  Can we use that single 9 to learn to recognize future 9s?
-
-\emph{Question:} Why not use hybrid optimization methods: say,
-momentum-based stochastic gradient descent for the initial transient
-phase, followed by some other method for the final fine-tuning?
-
-\emph{Question (iterated NAG method):} Why not modify the NAG
-optimization method by doing a double iteration?  Start from position
-$w$.  Compute a trial value, $\delta w = v$.  Then compute the
-gradient at the updated trial position, $w+\Delta w$.  Then do a trial
-update to the velocity, based on the gradient at the updated trial
-position.  Then use that trial velocity to compute a second trial
-update to the position.  Then do a second trial update to the
-velocity.  At this point we could terminate.  Or we do more
-iterations.  (Does the iterative process converge?)  Good ways to
-analyse this: look at a quadratic cost function; look at a
-fourth-order cost function; do some simple experiments.
-
-\emph{Question:} What happens if we initialize our weights so that the
-graph has the structure of a DAG expander?  This seems likely to have
-some advantages.
-
-\emph{Idea: The true cost function.}  Analyse deviations using central
-limit theorem.
-
-\emph{Idea: Analyse the expected outputs from subsequent layers of a
-  neural network.}  Are they being damped or increased?
-
-\emph{Idea:} Combine sparse initialization with dropout.
-
-\emph{Idea:} Write an analysis of sparse initialization.
 
 \chapter{Miscellanea}
 
