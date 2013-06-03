@@ -1816,13 +1816,77 @@ correction to $v_t$ than CM.''  I don't think this is quite right.
 It's not a question of pointing back to the original position.  It's a
 question of pointing in the right direction, which may be different
 than the direction of the original position. Still, this line of
-reasoning otherwise seems sound.
+reasoning otherwise seems sound.  (And it's probably true in two
+dimensions.)
 
-Why not do a double iteration?
+``While each iteration of NAG may only be slightly more effective than
+CM at correcting a large and inappropriate velocity, this difference
+in effectiveness may compound as the algorithms iterate.''  I don't
+know that this is the case.  It seems more likely to me that rather
+than accumulating small improvements, it actually is preventing
+occasional bad mistakes.
+
+There is a nice example in the appendix.  Basically, a 2d example,
+with very elongated ellipses as the contours.  The momentum method
+(with low friction) has the problem that it only very slowly builds up
+momentum in the right direction.  Basically it overshoots early on,
+and then has to swing backwards and forwards, slowly.  NAG avoids
+this, even though it also has low values of momentum.
+
+They analyse CM and NAG for the objective function $C(y) = \sum_j
+\lambda_j y_j^2+ c_j y_j$.  In this particular case, they prove that
+NAG acts like the classical momentum technique with learning rate
+$\eta$, but with a modified momentum $\mu(1-\eta \lambda_j)$ in
+component $j$.  It should be possible to prove this through a
+straightforward computation.
+
+This means that for small learning rates CM and NAG become very
+similar.  Note that locally every (smooth, convex) cost function may
+be approximated by a quadratic cost functional (i.e., approximating by
+the appropriate quadratic locally), and so this behaviour is likely
+generic.  We also see that NAG is going to have lower momentums, and
+so more friction; it will tend to damp out oscillations.  The decrease
+in momentum will be particularly high when $\lambda_j$ is large.  This
+is good: it decreases the momentum a lot, and so increases the
+friction a lot, which damps out the overoscillation that will cause a
+problem as we go through the $y_j = 0$.
+
+Takeaway technique here: to understand an optimization technique it
+can really help to look at quadratic trial functions like this, where
+it may be possible to analyse behaviour analytically.  In particular,
+the big benefit of analysing quadratic cost functions is that they
+really do carry most of the (local) information we'll ever need.
+
+``The aim of our experiments is three-fold.  First, to investigate the
+attainable performance of stochastic momentum methods on deep
+autoencoders starting from well-designed random initializations;
+second, to explore the importance and effect of the schedule for the
+momentum parameter $\mu$ assuming an optimal fixed choice of the
+learning rate...; and third, to compare the performance of NAG versus
+CM.''
+
+They don't look at test errors --- i.e., they ignore regularization
+and overfitting.  Not sure how bulletproof their argument for this is
+--- it seems a bit like special pleading.  But I'm happy to run with
+it: the point is that optimization can be treated separately from
+generalization.  (Of course, it may be that a better optimization
+method is worse at generalization, and that ultimately needs to be
+looked into.)
+
+The schedule for $\mu$ which they used was to look for the smaller of
+$\mu_{\rm max}$ and $1-1/2(\lfloor t/250 \rfloor +1)$, where $t$ is
+the epoch number.  In other words, over the first 250 iterations, $\mu
+= 1/2$.  Then we switch to $3/4$.  Then to $5/6$.  And so on, until we
+get to $\mu_{\rm max}$.
+
 
 \section{Future reading}
 
 \textbf{SIFT:}
+
+Martens 2010: Hessian-Free optimization, and sparse initialization.
+
+\textbf{Collobert:} ``Natural language processing almost from scratch:''
 
 \textbf{Bengio et al (1994):} The vanishing gradient problem.
 ``Learning long-term dependencies with gradient descent is
@@ -1953,6 +2017,32 @@ do unsupervised feature learning with images.  Then we see a single
 \emph{Question:} Why not use hybrid optimization methods: say,
 momentum-based stochastic gradient descent for the initial transient
 phase, followed by some other method for the final fine-tuning?
+
+\emph{Question (iterated NAG method):} Why not modify the NAG
+optimization method by doing a double iteration?  Start from position
+$w$.  Compute a trial value, $\delta w = v$.  Then compute the
+gradient at the updated trial position, $w+\Delta w$.  Then do a trial
+update to the velocity, based on the gradient at the updated trial
+position.  Then use that trial velocity to compute a second trial
+update to the position.  Then do a second trial update to the
+velocity.  At this point we could terminate.  Or we do more
+iterations.  (Does the iterative process converge?)  Good ways to
+analyse this: look at a quadratic cost function; look at a
+fourth-order cost function; do some simple experiments.
+
+\emph{Question:} What happens if we initialize our weights so that the
+graph has the structure of a DAG expander?  This seems likely to have
+some advantages.
+
+\emph{Idea: The true cost function.}  Analyse deviations using central
+limit theorem.
+
+\emph{Idea: Analyse the expected outputs from subsequent layers of a
+  neural network.}  Are they being damped or increased?
+
+\emph{Idea:} Combine sparse initialization with dropout.
+
+\emph{Idea:} Write an analysis of sparse initialization.
 
 \chapter{Miscellanea}
 
