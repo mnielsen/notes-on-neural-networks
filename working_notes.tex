@@ -727,6 +727,47 @@ space with the number of training cases.''  I don't quite understand
 the comment about mappings in both directions --- I thought the
 earlier work provided such mappings.  Perhaps I should look closer.
 
+\section{Pinto, Cox and DiCarlo (2008)}
+
+\link{http://www.ploscompbiol.org/article/info\%3Adoi\%2F10.1371\%2Fjournal.pcbi.0040027}{Why is Real-World Visual Object Recognition Hard?}
+ 
+``[W]e show that a simple V1-like [computational?] model --- a
+neuroscientist's `null' model, which should perform poorly at
+real-world visual object recognition tasks --- outperforms
+state-of-the-art object recognition systems (biologically inspired and
+otherwise) on a standard, ostensibly natural image recognition test.''
+I'm not sure what moral to take away.  That simple systems can do well
+recognizing natural images?  But they also created another ``simple''
+test which demonstrated the inadequacy of their system.  ``Taken
+together, these results demonstrate that tests based on uncontrolled
+natural images can be seriously misleading...''  The ultimate
+conclusion is that they want more focus on real-world image variation,
+by which they mean that the same object can cast a potentially
+infinite number of variations on the eye.
+
+``[I]t is not clear to what extent such `natural' image tests [like
+Caltech101] actually engage the core problem of object recognition.
+Specifically, while the Caltech101 set certainly contains a large
+number of images (9,144 images), variations in object view, position,
+size, etc., between and within object category are poorly defined and
+are not varied systematically [I can see that this might be a problem
+if the sampling is not reasonably fair].  Furthermore, image
+backgrounds strongly covary with object category [wow!].... The
+majority of images are also `composed' photographs, in that a human
+decided how the shot should be framed [!], and thus the placement of
+objects within the image is not random and the set may not properly
+reflect the variation found in the real world.  Furthermore, if the
+Caltech101 object recognition task is hard, it is not easy to know
+what makesi it hard---different kinds of variation (view, lighting,
+exemplar, etc) are all inextricably linked together.''
+
+``We built a very basic representation inspired by known properties of
+V1 `simple' cells... The responses of these cells to visual stimuli
+are well-described by a spatial linear filter, resembling a Gabor
+wavelet... with a nonlinear output function... and some local
+normalization (roughly analogous to `contrast gain control').''
+
+
 \section{Jarrett (2009)}
 
 ``What is the Best Multi-Stage Architecture for Object Recognition?'':
@@ -772,6 +813,41 @@ seems overly pessimistic to me: one can certainly imagine a theory
 that tells us what features there should be at the second level.
 Still, it's obviously an attractive model.
 
+``The second ingredient of a feature extraction system is the
+non-linearity.''  I don't really understand deeply why non-linearity
+is so necessary.  It'd be good to do so.
+
+Notes that pooling can be applied over space, over scale and space
+(rescaling?), and over similar feature types and space.  ``This layer
+[pooling] builds robustness by computing an average or a max of the
+filter responses within the pool.''
+
+Caltech 101: 101 categories.  About 50 images per category, and the
+size of each image is roughly 300 by 200 pixels.  SIFT features plus a
+linear classifier will give us 50 percent classification accuracy.
+Using a better classifer will give us 65 percent.  ``[T]he best
+results on Caltech-101 have been obtained by combining a large number
+of different feature families [29]''.  Reference is to Varma and Ray.
+
+``The hierarchy stacks one or several feature extraction stages, each
+of which consists of filter bank layer, non-linear transformation
+layers [\emph{sic}?], and a pooling layer that combines filter
+responses over local neighborhoods using an average or max operation,
+thereby achieving invariance to small distortions.''
+
+Local contrast normalization: The idea ``This module... [enforces] a sort of
+local competition between features in a feature map, and between
+features at the same stage in different feature maps.''
+
+
+Conclusions: ``[U]sing a rectifying non-linearity is the single most
+important factor in improving the performance of a recognition
+system[!]''  I don't understand the heuristic justifications they
+give. ``Also introducing a local normalization layer improves the
+performance.  It appears to make supervised learning considerably
+faster, perhaps because all variables have similar variances (akin to
+the advantages introduced by whitening and other decorrelation
+methods).''
 
 \section{Lee (2009) - video}
 
@@ -1911,7 +1987,27 @@ do Y later, than Z (which depends on X) later still, and so on.  RNNs
 seem like they might be especially useful for ``chains of thought'' as
 opposed to pattern recognition.
 
+Comparison to HF: They note that HF is a truncated Newton method.
+Sounds like it's an improved linear conjugate gradient
+method. ``[Conjugate gradient] accumulates information as it iterates
+which allows it to be optimal in a much stronger sense that any other
+first-order method (like NAG)''
 
+The idea behind all these first-order methods --- momentum-based and
+NAG --- seeems to be to find indirect ways of putting curvature into
+the problem, by computing gradients at two separate points.  This
+gives us information about the locally approximating quadratic, rather
+than the locally approximating plane.  It seems as though you could do
+better by making use of even more points --- three or four would give
+you higher-order still approximations.  (They still wouldn't give you
+global information, though.)
+
+I need to get clear on the relationship of curvature to gradient
+descent.  The basic point is that if the cost surface is highly curved
+in some direction, gradient descent will tend to send us in that
+direction.  That's not always what we want.  Sometimes we want to move
+off along low curvature directions as well.  That's typically the case
+for a general (positive-definite) quadratic.
 
 
 
@@ -1927,6 +2023,8 @@ opposed to pattern recognition.
 Martens 2010: Hessian-Free optimization, and sparse initialization.
 
 Bengio 2007 on autoencoders.
+
+Agre.
 
 \textbf{Collobert:} ``Natural language processing almost from scratch:''
 
