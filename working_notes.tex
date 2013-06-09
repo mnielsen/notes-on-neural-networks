@@ -767,6 +767,71 @@ are well-described by a spatial linear filter, resembling a Gabor
 wavelet... with a nonlinear output function... and some local
 normalization (roughly analogous to `contrast gain control').''
 
+\section{Deng (2009)}
+
+``ImageNet: A Large-Scale Hierarchical Image Database''
+
+An ``ontology of images builts upon the backbone of the WordNet
+structure''.  ``Each meaningful concept in WordNet, possibly described
+by multiple words or word phrases, is called a `synonym set' or
+`synset'.''  There are apparently 80 thousand (noun) synsets in
+WordNet.  (I presume there are verb synsets, and perhaps other types
+as well?)  The idea of ImageNet is to provide 500-1,000 images per
+synset.  That's a grand total of some tens of millions of images.
+``Images of each concept are quality-cntrolled and human-annotated''.
+To some extent this means that they don't match what we'll actually
+find ``in the wild''.  This paper reports early work --- 5,247 synsets
+and 3.2 million images.
+
+``ImageNet aims to provide the most comprehensive and diverse coverage
+of the image world.  The current 12 subtrees consist of a total of 3.2
+million cleanly annotated images spread over 5,247 categories... To
+our knowledge this is already the largest clean [what does this mean?]
+image dataset available to the vision research community, in terms of
+the total number of images, number of images per category as well as
+the number of categories.''  ``... to our knowledge no existing vision
+dataset offers images of 147 dog categories.''
+
+Even at very low levels in the tree, ImageNet labels were found to be
+highly accurate by an independent group of subjects.
+
+``ImageNet is constructed with the goal that objects in images should
+have variable appearances, positions, view points, poses as well as
+background clutteer and occlusions.''  They do an interesting thing to
+measure diversity.  They compute an ``average image'' for each synset,
+and then measure the JPG file size.  The idea is that very different
+images will blur out (and so have small file sizes), while more
+similar images will not (and so will have large file sizes).  They
+find that their images are much more diverse than Caltech101.
+
+Images are collected by querying several image search engines with the
+appropriate noun or noun phrase.  ``To obtain as many images as
+possible, we expand the query set by appending the queries with the
+word [?] from parent synsets, if the same word appears in the gloss of
+the target synset [?]''.  ``To further enlarge and diversify the
+candidate pool, we translate the queries into other languages''.
+
+Using Mechanical Turk to label: ``In each of our labeling tasks, we
+present the users with a set of candidate images and the definition of
+the target synset... We then ask users to verify whether each image
+contains objects of the synset.  We encourage users to select images
+regardless of occlusions, number of objects and clutter in the scene
+to ensure diversity.''  Of course, the problems are that people make
+mistakes, and they may not agree with one another.  They get multiple
+people to label each image, and only classify something positively if
+an image gets a convincing majority of the votes.  ``... different
+categories require different levels of consensus among users.''
+Basically, the more contentious, the more votes we need to be sure.
+They have to do some initial setup to figure out the appropriate
+thresholds (or if a threshold fails to exist).
+
+Nice idea: classifying at each node in the WordNet net.  This reduces
+the classification difficulty at each step.  I wonder if there's a
+natural way this can be done in deep neural nets?  Maybe by building a
+feature representation unsupervised, and then using those features to
+train a (tree-like) classifier?  ``At nearly all levels, the
+performance of the tree-max classifier is consistently higher than the
+independent classifier.''
 
 \section{Jarrett (2009)}
 
