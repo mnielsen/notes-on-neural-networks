@@ -835,9 +835,6 @@ layers [\emph{sic}?], and a pooling layer that combines filter
 responses over local neighborhoods using an average or max operation,
 thereby achieving invariance to small distortions.''
 
-Local contrast normalization: The idea ``This module... [enforces] a sort of
-local competition between features in a feature map, and between
-features at the same stage in different feature maps.''
 
 
 Conclusions: ``[U]sing a rectifying non-linearity is the single most
@@ -1702,6 +1699,26 @@ error rate: 17.0 percent.  That seems incredibly good, although not
 human comparable.  They also report a bunch of other results: every
 single one is very, very good.
 
+\section{Le (2012)}
+
+\link{http://ai.stanford.edu/\~ang/papers/icml12-HighLevelFeaturesUsingUnsupervisedLearning.pdf}{Building
+  high-level features using large-scale unsupervised learning}
+
+I have described the architecture elsewhere.  Let me describe some of
+the results.  They took 13,026 faces from Labeled Faces in The Wild,
+and about 24,000 distractor objects from ImageNet.  I'm not especially
+keen on this procedure --- it seems like there might be very easy ways
+to distinguish the two data sets that have little to do with whether
+or not a face is present.
+
+``After training, we used this test set to measure the performance of
+each neuron in classifying faces against distractors.  For each
+neuron, we found its maximum and minimum activation thresholds, then
+picked 20 equally spaced thresholds in between.  The reported accuracy
+is the best classification accuracy among 20 thresholds.''  There's a
+lot that's not being said here.  Which neurons are we considering?
+Every neuron in the network?  Or just in the last layer?
+
 \section{Le (2012), video}
 
 ``Tera-scale deep learning'': \link{http://vimeo.com/52332329}{link}
@@ -2025,6 +2042,8 @@ Martens 2010: Hessian-Free optimization, and sparse initialization.
 Bengio 2007 on autoencoders.
 
 Agre.
+
+Read up on ImageNet (Deng 2009)
 
 \textbf{Collobert:} ``Natural language processing almost from scratch:''
 
