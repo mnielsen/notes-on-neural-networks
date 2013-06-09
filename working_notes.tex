@@ -1717,7 +1717,41 @@ neuron, we found its maximum and minimum activation thresholds, then
 picked 20 equally spaced thresholds in between.  The reported accuracy
 is the best classification accuracy among 20 thresholds.''  There's a
 lot that's not being said here.  Which neurons are we considering?
-Every neuron in the network?  Or just in the last layer?
+Every neuron in the network?  Or just in the last layer?  And it's not
+actually stated that higher activations are the right criterion (as
+opposed to lower).  However, I think I can reasonably infer that's the
+case, because of the pooling.
+
+``The best neuron in the network achieves 81.7 percent accuracy in
+detecting faces''.  That's compared to a guessing strategy, which
+achieves 64.8 percent.  They found that removing the local contrast
+normalization reduced this number to 78.5 percent.
+
+The performed a numerical optimization to find the optimal stimulus.
+This really is quite striking: it's definitely a face!
+
+They did a very interesting control experiment, removing the faces
+from the unlabelled training data, using OpenCV.  The recognition
+accuracy of the best neuron dropped to 72.5 percent.  So it's not just
+that we're detecting ImageNet versus Labeled Faces in the Wild.
+
+Invariance properties: They used 10 face images and did some scaling,
+rotation, x and y translations.  The face feature detector still
+worked pretty well for rotation, not so well for the other operations.
+Still, it's interesting that this is possible at all, especially since
+rotation and scaling are going to be hard to build into the network.
+
+\textbf{Other feature detectors:} They repeated the face detector
+work, but with cats and human body parts.  They got 74.8 \% and 76.7
+\%, respectively.  The data sets were constructed so that random
+guessing would give 64.8 percent, as for the faces.  They also tried
+some deep autoencoder experiments, and found that while there were
+selective neurons in those networks, they weren't nearly as good as
+with the muli-RICA-layer architecture.
+
+\textbf{ImageNet:} On the 2011 data set --- 16 million images, 20,000
+categories --- they achieved 15.8 percent accuracy, a huge jump over
+the best (9.3 percent) results.
 
 \section{Le (2012), video}
 
