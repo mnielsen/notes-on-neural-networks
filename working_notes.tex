@@ -1003,6 +1003,76 @@ image.
 I will come back to the energy function a little later.  XXX.  We can
 do Gibbs sampling to generate the appropriate distributions.
 
+\section{Scherer (2010)}
+
+\link{http://www.ais.uni-bonn.de/papers/icann2010\_maxpool.pdf}{Evaluation
+  of Pooling Operations in Convolutional Architectures for Object
+  Recognition}
+
+Notes that many standard models are based on Hubel and Wiesel: the
+Neocognitron, convolutional nets, HoG, SIFT, Gist features, and HMAX.
+``These models can be broadly distinguished by the operation that
+summarizes over a spatial neighbourhood.  Most earlier models perform
+a subsampling operation, where the average over all input values is
+propagated to the next layer... A different approach is to compute the
+maximum value in a neighborhood... While entire models have been
+extensively compared, there has been no research evaluating the choice
+of the aggregation function so far.  The aim of our work is therefore
+to empirically determine which of the established aggregation
+functions is more suitable for vision tasks.  Additionally, we
+investigate if ideas from signal processing, such as overlapping
+receptive fields and window functions can improve recognition
+performance.''
+
+They note that there are so many variants on complex cells / pooling
+operations that it's impossible to do a complete analysis.  Instead,
+they're going to choose a particular model and analyse that, based on
+convolutional neural networks.  ``Our choice of a CNN is largely
+motivated by the fact that the operation performed by pooling layers
+is easily interchangeable without modifications to the architecture.''
+
+``The purpose of the pooling layers is to achieve spatial invariance
+by reducing the resolution of the feature maps.''  Is that really
+right?  We don't actually want spatial invariance --- relative
+positions matter.  But the details don't matter.  It's a way of saying
+small spatial shifts (relative to feature size) don't matter.  So a
+better sentence would be: the purpose of the pooling layers is to
+ensure that small spatial shifts (relative to feature size) don't
+matter.
+
+``We evaluate two different pooling operations: max pooling and
+subsampling.''  Subsampling computes an average and multiples by a
+trainable scalar.  Max pooling applies a window function and computers
+the maximum in the neighbourhood.
+
+They wanted to do the following: (1) figure out how max pooling and
+subsampling compare; (2) determine whether overlapping pooling windows
+improve performance; and (3) find suitable window functions.
+
+``For both NORB and Caltech-101 our results indicate that
+architectures with a max pooling operation converge considerably
+faster than those employing a subsampling operation.  Furthermore,
+they seem to be superior in selecting invariant features and improve
+generalization.''  Of course, this conclusion only applies in their
+specific context.  Maybe if we increased the data set then this would
+no longer be true?  Or if we changed the architecture in some other
+way?  Furthermore, no explanation of why it is true has been given.
+
+``To evaluate how the step size of overlapping pooling windows affects
+recognition rates, we essentially used the same architectures as in
+the previous section.  Adjusting the step size does, however, change
+the size of the feature maps [I don't see why --- we can make them the
+same size] and with it the total number of trainable parameters, as
+well as the ratio between fully connected weights and shared
+weights.''  I must admit I don't understand what's being done here, or
+in the remainder of this section.  I think it would be dangerous for
+me to take much away from it.
+
+Comparison to Coates' (2011) paper: Coates found that shorter stride
+length helped.  However, the model used seems to have been quite a bit
+different to this paper.  So I'm not sure I'd read too much into
+either result --- more study is, I think, needed, to understand this.
+
 \section{Coates (2011)}
 
 \link{http://www.stanford.edu/~acoates/papers/coatesleeng\_aistats\_2011.pdf}{An
@@ -2126,96 +2196,6 @@ off along low curvature directions as well.  That's typically the case
 for a general (positive-definite) quadratic.
 
 
-
-
-
-
-
-
-\section{Future reading}
-
-\textbf{SIFT:}
-
-Martens 2010: Hessian-Free optimization, and sparse initialization.
-
-Bengio 2007 on autoencoders.
-
-Agre.
-
-Read up on ImageNet (Deng 2009)
-
-\textbf{Collobert:} ``Natural language processing almost from scratch:''
-
-\textbf{Bengio et al (1994):} The vanishing gradient problem.
-``Learning long-term dependencies with gradient descent is
-difficult''.
-
-\textbf{Erhan:} ``Why does unsupervised pre-training help deep learning?''
-
-\textbf{Collobert on natural language}
-
-\textbf{HoG:}
-
-\textbf{Hinton et al (2006):}
-
-Conference on learning representations: http://techtalks.tv/iclr2013/
-
-IPAM: https://www.ipam.ucla.edu/schedule.aspx?pc=gss2012
-
-\textbf{Lee and Mumford (2003):}
-\link{http://dash.harvard.edu/bitstream/handle/1/3637109/Mumford\_HierarchBayesInfer.pdf?sequence=1}{link}
-This looks like great background reading on the idea of doing
-hierarchical inference in the visual cortex.
-
-\textbf{Scherer et al (2010):} On evaluation of different pooling strategies: \link{http://www.ais.uni-bonn.de/papers/icann2010\_maxpool.pdf}{link}
-
-
-
-\textbf{Embrechts (2010)}:
-
-\textbf{Dropout:}
-
-\textbf{Le (2012):} \link{https://plus.google.com/u/0/+ResearchatGoogle/posts/EMyhnBetd2F}{link}
-
-\textbf{Le et al (2012):} 9 layers.  Locally connected.  Sparse
-autoencoder.  Pooling.  Local contrast normalization.  Can discover
-faces without labels.
-
-\textbf{Seide (2011):}
-\link{http://research.microsoft.com/apps/pubs/default.aspx?id=153169}{link}
-
-\textbf{Bengio (2007):} \link{http://arxiv.org/pdf/1206.5533v2.pdf}{link}
-
-\textbf{Ranzato (2007):}
-
-\textbf{Lee (2008):} 
-
-\textbf{Larochelle (2009):}
-
-\textbf{Wolpert (XXX):} No free lunch.
-
-\textbf{The NIPS 2012 talks:}
-
-\textbf{Elements of statistical learning:} \link{http://www.stanford.edu/\~hastie/local.ftp/Springer/OLD//ESLII\_print4.pdf}{link}
-
-\textbf{No more pesky learning rates:} \link{http://arxiv.org/pdf/1206.1106.pdf}{link}
-
-\textbf{Distributed deep learning:}
-\link{http://research.google.com/archive/large\_deep\_networks_nips2012.html}{link}.
-
-\textbf{Stanford tutorial:} http://ufldl.stanford.edu/wiki/index.php/UFLDL\_Tutorial
-
-\textbf{To do:} Contrastive divergence
-(http://learning.cs.toronto.edu/~hinton/absps/cdmiguel.pdf and
-http://www.cs.utoronto.ca/~hinton/absps/nccd.pdf ). LeCun 1998
-``Efficient BackProp''.  Dropout.  Maxout.  Andrew Ng's 1997 paper
-``Preventing overfitting of cross-validation data''.  Blumer \emph{et
-  al} with guarantees on induction:
-(http://scholar.google.ca/scholar?cluster=11895938102761137877\&hl=en\&as\_sdt=0,5).
-Would be good to understand this in conjunction with no free lunch.
-NIPS papers are online.  
-
-
 \chapter{Miscellanea}
 
 \textbf{Compiling to neural networks:} Can we create compilers which
@@ -2408,6 +2388,86 @@ that progress comes from playing these ideas off against one another.
 tricks (of various generality) which can be used to improve pattern
 recognition performance.  There are some general heuristics: \emph{use
   symmetry} is obviously one.
+
+
+\section{Future reading}
+
+\textbf{SIFT:}
+
+Martens 2010: Hessian-Free optimization, and sparse initialization.
+
+Bengio 2007 on autoencoders.
+
+Agre.
+
+Hubel and Wiesel: 1959.  Simple and Complex.  The basic model of V1.
+
+Frome 2009: Large-scale Privacy Protection in Google Street View
+
+\textbf{Collobert:} ``Natural language processing almost from scratch:''
+
+\textbf{Bengio et al (1994):} The vanishing gradient problem.
+``Learning long-term dependencies with gradient descent is
+difficult''.
+
+\textbf{Erhan:} ``Why does unsupervised pre-training help deep learning?''
+
+\textbf{HoG:}
+
+\textbf{Hinton et al (2006):}
+
+Conference on learning representations: http://techtalks.tv/iclr2013/
+
+IPAM: https://www.ipam.ucla.edu/schedule.aspx?pc=gss2012
+
+\textbf{Lee and Mumford (2003):}
+\link{http://dash.harvard.edu/bitstream/handle/1/3637109/Mumford\_HierarchBayesInfer.pdf?sequence=1}{link}
+This looks like great background reading on the idea of doing
+hierarchical inference in the visual cortex.
+
+\textbf{Scherer et al (2010):} On evaluation of different pooling strategies: \link{http://www.ais.uni-bonn.de/papers/icann2010\_maxpool.pdf}{link}
+
+
+
+\textbf{Embrechts (2010)}:
+
+\textbf{Dropout:}
+
+\textbf{Le (2012):} \link{https://plus.google.com/u/0/+ResearchatGoogle/posts/EMyhnBetd2F}{link}
+
+\textbf{Seide (2011):}
+\link{http://research.microsoft.com/apps/pubs/default.aspx?id=153169}{link}
+
+\textbf{Bengio (2007):} \link{http://arxiv.org/pdf/1206.5533v2.pdf}{link}
+
+\textbf{Ranzato (2007):}
+
+\textbf{Lee (2008):} 
+
+\textbf{Larochelle (2009):}
+
+\textbf{Wolpert (XXX):} No free lunch.
+
+\textbf{The NIPS 2012 talks:}
+
+\textbf{Elements of statistical learning:} \link{http://www.stanford.edu/\~hastie/local.ftp/Springer/OLD//ESLII\_print4.pdf}{link}
+
+\textbf{No more pesky learning rates:} \link{http://arxiv.org/pdf/1206.1106.pdf}{link}
+
+\textbf{Distributed deep learning:}
+\link{http://research.google.com/archive/large\_deep\_networks_nips2012.html}{link}.
+
+\textbf{Stanford tutorial:} http://ufldl.stanford.edu/wiki/index.php/UFLDL\_Tutorial
+
+\textbf{To do:} Contrastive divergence
+(http://learning.cs.toronto.edu/~hinton/absps/cdmiguel.pdf and
+http://www.cs.utoronto.ca/~hinton/absps/nccd.pdf ). LeCun 1998
+``Efficient BackProp''.  Dropout.  Maxout.  Andrew Ng's 1997 paper
+``Preventing overfitting of cross-validation data''.  Blumer \emph{et
+  al} with guarantees on induction:
+(http://scholar.google.ca/scholar?cluster=11895938102761137877\&hl=en\&as\_sdt=0,5).
+Would be good to understand this in conjunction with no free lunch.
+NIPS papers are online.  
 
 
 
