@@ -727,6 +727,58 @@ space with the number of training cases.''  I don't quite understand
 the comment about mappings in both directions --- I thought the
 earlier work provided such mappings.  Perhaps I should look closer.
 
+\section{Bengio, Lamblin, Popovici, Larochelle (2007)}
+
+\link{http://www.iro.umontreal.ca/\~lisa/publications2/index.php/attachments/single/24}{Greedy
+  Layer-Wise Training of Deep Networks}
+
+They have a complexity-theoretic point of view, a point of view that
+says depth (in circuits, or otherwise) helps compute functions.  I
+guess this is more or less the point of view of computer scientists
+who believe that \textbf{NC} is a strict subset of \textbf{P}.
+
+In general, this is a point of view I haven't much engaged with.  I've
+been thinking more in the detailed world of the practitioner,
+wondering just how well a given network functions, and not thinking
+about these structural questions.  But I suppose there is a deep
+structural question here, which is whether there are deep networks
+that can compute functions using polynomially many elements, and said
+functions require exponentially many more elements in a shallow
+network?
+
+A skeptical way of looking at this is to say that this is a question
+about scaling, and that scaling isn't what matters for solving pattern
+recognition problems in the real world, since we have just one such
+world, of fixed size.  But to be skeptical of the skeptic, we would
+still find it interesting if, in the real world, we were trying to
+learn functions which were much easier to compute by a deep network
+than a shallow.
+
+Why might deep networks be better?  Two broad reasons: ease of
+computation; and ease of learning.  I'd like to understand both these:
+Why might computation be easier?  And why might learning be easier?
+
+Well, those notes get me to the end of the first sentence of the
+abstract!  Let me skip ahead and see if I can sum up the first
+paragraph, since it seems very interesting.  The basic problem is the
+ability of various machine-learning algorithms to learn highly-varying
+functions, ``e.g., they would require a large number of pieces to be
+well represented by a piecewise-linear approximation.  Since the
+number of pieces can be made to grow exponentially... If the shapes of
+all these pieces are unrelated, one needs enough examples for each
+piece in order to generalize properly.  However, if these shapes are
+related and can be predicted from each other, `non-local' learning
+algorithms have the potential to generalize to pieces not covered by
+the training set.''  I can sort of see this: basically, linear
+boundaries aren't going to give us very much, even with new features:
+they can't go a huge amount beyond what is already in the input data.
+But I don't quite see what non-linearities do to get beyond this.  I
+guess it's that we're starting to learn from multiple pieces of
+training data at once, and making higher-order generalizations.
+(Basically, once you can do {\sc and} gates, you can do conditional
+logic, and that lets you build up hierarchical reasoning.)
+
+
 \section{Pinto, Cox and DiCarlo (2008)}
 
 \link{http://www.ploscompbiol.org/article/info\%3Adoi\%2F10.1371\%2Fjournal.pcbi.0040027}{Why is Real-World Visual Object Recognition Hard?}
@@ -2394,9 +2446,21 @@ recognition performance.  There are some general heuristics: \emph{use
 
 \textbf{SIFT:}
 
+Bengio 2007 on autoencoders.
+
+Recent Bengio paper on new approach to deep learning:http://arxiv.org/abs/1306.1091
+
+Elliasmith
+
 Martens 2010: Hessian-Free optimization, and sparse initialization.
 
-Bengio 2007 on autoencoders.
+Boureau: A theoretical analysis of feature pooling in visual
+recognition (2010).
+
+Sermanet: Convolutional neural networks applied to house numbers digit
+classification
+
+Elkan 2013: Learning meanings for sentences: http://cseweb.ucsd.edu/\~elkan/250B/learningmeaning.pdf
 
 Agre.
 
@@ -2416,6 +2480,8 @@ difficult''.
 
 \textbf{Hinton et al (2006):}
 
+PAC learning.
+
 Conference on learning representations: http://techtalks.tv/iclr2013/
 
 IPAM: https://www.ipam.ucla.edu/schedule.aspx?pc=gss2012
@@ -2424,10 +2490,6 @@ IPAM: https://www.ipam.ucla.edu/schedule.aspx?pc=gss2012
 \link{http://dash.harvard.edu/bitstream/handle/1/3637109/Mumford\_HierarchBayesInfer.pdf?sequence=1}{link}
 This looks like great background reading on the idea of doing
 hierarchical inference in the visual cortex.
-
-\textbf{Scherer et al (2010):} On evaluation of different pooling strategies: \link{http://www.ais.uni-bonn.de/papers/icann2010\_maxpool.pdf}{link}
-
-
 
 \textbf{Embrechts (2010)}:
 
