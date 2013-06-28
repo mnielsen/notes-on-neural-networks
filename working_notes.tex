@@ -565,6 +565,49 @@ Principle were not called upon to justify most of the architectures
 and training criteria described in this paper.''
 
 
+\section{Ferret rewiring  (Nature, 2000)} 
+
+The primary visual cortex has what are called orientation modules.
+These are groups of cells that share a preferred ``stimulus
+orientation''.  It's not clear to me what a stimulus orientation is,
+exactly --- do they mean the direction the stimulus comes from.  I'll
+get back to that.  Anyway, there is apparently an orientation map.
+Well, when they rewire the ferrets' brains, apparently there are
+visually responsive cells in the auditory cortex that start to develop
+an orientation map!  It's similar to the one in the visual cortex,
+although apparently less orderly.
+
+They use a nice piece of terminology: sensory pathways have an
+\emph{instructive} role in the development of cortical networks.  The
+visual cortex apparently has a couple of different kinds of structure:
+ocular dominance columns, and orientation columns.  Actually, looking
+at Wikipedia, there's quite a bit more structure in there than that.
+Apparently, orientation columns were discovered simply by stimulating
+a cat with visual stimuli from different directions, and noticing
+where in the visual cortex excitement occurred.  They're apparently
+little slabs of cells that respond to visual stimuli from a particular
+direction.  Perhaps unsurprisingly, these columns are arranged into
+little pinwheels --- it's natural enough that they would reflect
+external geometry.
+
+They wanted to investigate ``whether afferent [i.e., sensory] activity
+or intrinsic features of the cortical target regulate the development
+of orientation columns.''  ``... within limits, input activity [from
+eyes to auditory cortex] has a significant instructive role in
+establishing the cortical circuits that underlie orientation
+selectivity and the orientation map''.
+
+They identify two separate things --- the degree of ``tuning'' in the
+cortex, as well as the orientation map.  Apparently, these two things
+are found to be more or less independent.  What's ``orientation
+tuning'' mean?  Maybe it's a way of calibrating the respective meaning
+of activation of different orientation columns?  ``... afferent
+activity is required for at least the maintenance of orientation
+selectivity in V1 neurons''.  In other words, you destory the
+orientation structure if you don't get sensory input.  This is a
+complementary result.
+
+
 \section{Tenenbaum, de Silva and Langford (2000)}
 
 \link{http://scholar.google.ca/scholar?cluster=14602426245887619907&hl=en&as_sdt=0,5}{(link)}
@@ -1735,6 +1778,71 @@ merely because there is some kind of universality theorem for them.
 Correlation does not imply causation: Keep it in mind when
 interpreting the results of machine learning algorithsm.
 
+\section{Hinton 2012 --- Coursera}
+
+\textbf{Lecture 5 b: Object recognition:} If you want to solve
+computer vision, it may help to find features that are invariant under
+things like rotation, translation, and so on.  Example: parallel lines
+with a red dot between them.  This is invariant under rotation and
+translation, but may actually be quite a useful feature.  I guess I
+can imagine similar features being use to recognize an eye.
+Relationship between features may themselves be captured by other
+features.  The idea of normalizing an image: once normalized, it may
+be easier to extract features.  Of course, that then requires us to
+solve the problem: how to normalize?  (Hinton claims, without
+presenting anything so gauche as actual evidence, that we don't
+mentally rotate images to recognize them.)  One approach to
+normalization: brute force approach, trying all possible boxes, in a
+wide range of positions and scales.
+
+\textbf{Lecture 5c: Convolutional neural networks for handwriting
+  recognition:} Early example of deep neural nets, from the 1980s.
+The idea is to \emph{replicate features}.  So an edge is a good
+feature --- and if it's a good feature at one point in the visual
+field, then it's probably a good feature at other points in the visual
+field.  Put another way, a feature detector that's useful at some
+point in the visual field is likely to be useful elsewhere, too.
+Replication across position reduces the number of parameters to be
+learned.  It's easy to learn replicated features with backpropagation.
+I guess we just constrain the weights to be the same.  So we want
+$\Delta w_1 = \Delta w_2$.  We just average the gradients across
+partial derivatives.  An advantage is that if we can learn to detect a
+feature in one place, then we learn how to detect it in other places.
+Hinton advocates against rotational or scale invariance.  I don't know
+if that's a good idea, frankly --- it seems to me that with modern
+computers that may be practical.  The idea of pooling adjacent
+replicated features.  Hinton advocates either averaging or the max (he
+says max is a little better).  LeNet was used to read something like
+10 percent of all checks in North America, according to Hinton.
+There's still a frontier associated to MNIST, and it may be worth
+trying to push that frontier.  The idea of generating synthetic data
+(in part to reduce overfitting).  McNemar test.
+
+\textbf{Lecture 5d: Convolutional neural networks for object
+  recognition:} Apparently most people doing vision with neural nets
+have switched to using rectified linear activation function, not just
+a sigma function.  A good paper on this appears to be ``Deep Sparse
+Rectifier Neural Networks'' (Bengio et al).  Use left-right reflection
+of images to get more training data.  And use image subsets to get
+more training data.  Uses GPUs: 500 cores per GPU, very fast at
+matrix-by-matrix arithmetic, very high bandwidth to memory.
+
+\textbf{Lecture 6a: stochastic mini-batch gradient descent:} Hinton
+calls this the most frequently used algorithm for training neural
+networks.  He says it's often preferable even to techniques from the
+optimization community.  How to choose a learning rate: if the error
+keeps getting worse or oscillates wildly, reduce the learning rate.
+If the error is falling slowly, increase the learning rate.  Do this
+all automatically.
+
+\textbf{Lecture 15a:} PCA: Lots of data in a very high-dimensional
+space.  But maybe there's a low-dimensional manifold on which most of
+the data lies.  In some sense that manifold captures much of the
+structure in the data.  What we want is a projector onto a
+lower-dimensional subspace.  Suppose $x_1, x_2, \ldots, x_m$ are our
+data points.  Obvious idea is to stick .
+
+
 \section{Hinton (2012) - videos}
 
 \link{https://www.ipam.ucla.edu/schedule.aspx?pc=gss2012}{IPAM Summer School videos}
@@ -2591,7 +2699,31 @@ http://www.cs.utoronto.ca/~hinton/absps/nccd.pdf ). LeCun 1998
 Would be good to understand this in conjunction with no free lunch.
 NIPS papers are online.  
 
+\textbf{Neural nets FAQ:} No one definition of a neural network. It's
+possible to do XOR with just a single hidden layer, if direct
+connections to the output from the input are allowed.  Problems which
+neural nets aren't so good at: predicting random or pseudo-random
+numbers; factoring large integers; determining whether a number is
+prime.  Research problem: find a net which will determine whether a
+number is prime.  Distinction between recurrent and feedforward neural
+networks.  Calls the set of cases we'd like to generalize to the
+\emph{population}.  Constructive learning: start with a small network,
+train, then gradually add extra neurons, and do more training.  A lot
+of work has been done on toy problems, and various hacks are known for
+the different toy problems.
 
+
+\textbf{Stephen Judd (1988):} Thesis on complexity of learning in
+neural networks: http://www.dtic.mil/dtic/tr/fulltext/u2/a450825.pdf.
+
+\textbf{Sima (1996):} Shows that finding weights is hard even for
+sigmoidal neural networks with just 3 nodes.  This can be viewed as an
+extension of Blum and Rivest (1989).
+http://scholar.google.ca/scholar?cluster=18396613610240979409\&hl=en\&as\_sdt=0,5
+
+\textbf{Egri and Schultz:} Found a neural network capable of
+recognizing prime numbers.
+http://www.cs.mcgill.ca/\~legri1/prime06.pdf
 
 
 \end{document}
