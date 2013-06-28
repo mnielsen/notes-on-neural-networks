@@ -28,6 +28,16 @@ artificial intelligence?  My reading will address both questions.
 
 \chapter{Papers}
 
+\section{Hopfield (1982)} 
+
+What I like about this paper is the condensed matter physicist's point
+of view.  Hopfield asks ``whether the ability of large collections of
+neurons to perform computational tasks may in part be a spontaneous
+collective consequence of having a large number of interacting simple
+neurons''.  He goes on to give an explanation of how a type of memory
+can be constructed in pretty much this way.  It's an inspiring point
+of view.
+
 \section{Bourland and Kamp (1988)}
 
 \link{http://scholar.google.com/scholar?cluster=17784424506773259343\&hl=en\&as\_sdt=0,5}{link}
@@ -53,6 +63,22 @@ matrix $wX+b$.  The quadratic loss function can then be written:
   \| w'\sigma(wX+b)+b'-X\|^2,
 \end{eqnarray}
 where $\|\cdot\|$ is here the usual Frobenius matrix norm.
+
+\section{Blum and Rivest (1989)} 
+
+Show that it's NP-complete to train a three node neural network.
+Apparently built on earlier work by Judd, who showed this for a
+general neural network; indeed, Judd showed that even approximating a
+function is NP-complete.  Blum and Rivest use a very particular
+architecture: $n$ inputs, a 2-neuron hidden layer, and a single output
+neuron.  They use a perceptron model, although I doubt that is
+essential.  The idea is simply to take a (supervised) training
+problem, and to ask whether there exist weights so that the output
+from the network are consistent with the training data.  They show
+that this problem is NP-complete.  They contrast this with a
+single-layer perceptron, which can be trained in polynomial time,
+using linear programming.  They comment that their technique does not
+apply to sigmoidal neurons, but that Judd's does.
 
 \section{Williams and Zipser (1989)}
 
@@ -2247,6 +2273,25 @@ direction.  That's not always what we want.  Sometimes we want to move
 off along low curvature directions as well.  That's typically the case
 for a general (positive-definite) quadratic.
 
+\section{Grandmother cell (Wikipedia)}
+
+Apparently proposed in the late 1960s by Konorski and Lettvin.
+Lettvin ``originated the term grandmother cell to illustrate the
+logical inconsistency of the concept.''  There is apparently quite a
+bit of support for the concept at the broad category level: neurons
+which are higly face-specific, and even to individual human faces.
+However, ``[e]ven the most selective face cells usually also disharge,
+if more weakly, to a variety of individual faces.''  A 2005 study
+found a ``neuron for Halle Berry'', which fired not only for pictures
+of the actress, but also to the words ``Halle Berry'', and which
+didn't fire when pictures of several other actresses were presented.
+Of course, this doesn't mean that was the only cell to respond.  The
+``sparseness'' hypothesis versus the ``distributed representation''
+theory.  It's really not clear to me that there is a dichotomy here.
+A picture of Halle Berry will no doubt cause many neurons to fire,
+some of which will fire for other reasons too. Maybe the hypothesis is
+this: for each single object or concept there is a corresponding
+grandmother neuron.
 
 \chapter{Miscellanea}
 
@@ -2446,13 +2491,20 @@ recognition performance.  There are some general heuristics: \emph{use
 
 \textbf{SIFT:}
 
-Bengio 2007 on autoencoders.
+Bengio and COurville: ``Deep learning of representations''
+http://www.iro.umontreal.ca/~bengioy/papers/BengioCourvilleChapter.pdf
+
+Andrew Ng, CS294A lecture notes
+
+McCulloch and Pitts
 
 Recent Bengio paper on new approach to deep learning:http://arxiv.org/abs/1306.1091
 
 Elliasmith
 
 Martens 2010: Hessian-Free optimization, and sparse initialization.
+
+Bengio et al ``Scaling Learning algorithms towards AI'' 2007
 
 Boureau: A theoretical analysis of feature pooling in visual
 recognition (2010).
@@ -2479,6 +2531,8 @@ difficult''.
 \textbf{HoG:}
 
 \textbf{Hinton et al (2006):}
+
+\textbf{Itamar Arel et al} For a different POV.
 
 PAC learning.
 
@@ -2515,6 +2569,12 @@ hierarchical inference in the visual cortex.
 \textbf{Elements of statistical learning:} \link{http://www.stanford.edu/\~hastie/local.ftp/Springer/OLD//ESLII\_print4.pdf}{link}
 
 \textbf{No more pesky learning rates:} \link{http://arxiv.org/pdf/1206.1106.pdf}{link}
+
+\textbf{Olshausen and Field:}
+
+Tenenbaum 2011: How to grow a mind
+
+Rumelhart et al on backprop.
 
 \textbf{Distributed deep learning:}
 \link{http://research.google.com/archive/large\_deep\_networks_nips2012.html}{link}.
