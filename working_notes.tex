@@ -1659,6 +1659,63 @@ Q: Does it make sense to do gradient descent on just a subset of
 weights at a time? I do wonder if that wouldn't sometimes yield better
 results.  Deep learning has something of this flavour.
 
+\section{Bengio 2012}
+
+Bengio, Courville, and Vincent: ``Representation Learning: A Review
+and New Perspectives'': http://arxiv.org/pdf/1206.5538v2.pdf.
+
+``This paper reviews recent work in the area of unsupervised feature
+learning and joint training of deep learning, covering advances in
+probabilistic models, auto-encoders, manifold learning, and deep
+architectures.''  ``... much of the actual effort in deploying machine
+learning algorithms goes into the design of preprocessing pipelines
+and data transformations that result in a representation of the data
+than can support effective machine learning.''  While I know this last
+is true, I haven't actually had to do a whole lot of data cleaning
+myself, yet.  ``What makes one representation better than another?
+Given an example, how should we compute its representation,
+i.e. perform feature extraction?  Also, what are appropriate
+objectives for learning good representations?  
+
+``Speech was one of the early applications of neural networks, in
+particular convolutional (or time-delay) neural networks... Microsoft
+has released in 2012 a new version of their MAVIS... speech system
+based on deep learning''.
+
+``Transfer learning is the ability of a learning algorithm to exploit
+commonalities between different learning tasks in order to share
+statistical strength, and \emph{transfer knowledge} across tasks.''
+There are apparently competitions for transfer learning.  I wonder
+what sorts of problems are being attacked?  ``Of course, the case of
+jointly predicting outputs for many tasks or classes, i.e., performing
+\emph{multi-task} learning also enhances the advantages of
+representation learning algorithms''
+
+``Unfortunately,... most of these algorithms [SVM etc] only exploit
+the principle of \emph{local generalization}... they rely on examples
+to \emph{explicitly map out the wrinkles of the target function}.
+Generalization is mostly achieved by a form of local interpolation
+between neighboring training examples... We advocate learning
+algorithms that are flexible and non-parametric, but do not rely
+exclusively on the smoothness assumption.  Instead, we propose to
+incorporate generic priors such as those enumerated above into
+representation-learning algorithms.''  This starts to get at the point
+of view that says that neural network architecture is all about
+figuring out how we generalize.  If there is a hierarchical structure
+in how to generalize well, that's what your network will need.  If
+not, it won't.  ``Kernel machines are useful, but they depend on a
+prior definition of a suitable similarity metric, or a feature space
+in which naive similarity metrics suffice.  We would like to use the
+data, along with very generic priors, to discovery these features, or
+equivalently, a similarity function.''
+
+They make a really nice point about expressiveness.  ``[H]ow many
+parameters does [a model[ require compared to the number of input
+regions (or configurations) it can distinguish?''  They argue that a
+deep net can distinguish exponentially more regions than more
+conventional approaches.
+
+
 \section{Bottou (2012)}
 
 \link{http://leon.bottou.org/papers/bottou-tricks-2012}{(link)}
@@ -2381,6 +2438,105 @@ direction.  That's not always what we want.  Sometimes we want to move
 off along low curvature directions as well.  That's typically the case
 for a general (positive-definite) quadratic.
 
+\section{Summary of CIFAR-10 results}
+
+As at July, 2013.  I have drawn heavily on the compendium of results
+by
+\link{http://rodrigob.github.io/are\_we\_there\_yet/build/classification_datasets_results.html}{Rodrigo
+  Benenson}.  Note that CIFAR-10 contains 10 classes, with 5,000
+training images per class, and 1,000 test images per class.  Images
+are 32 by 32, and in RGB.  Not centred or size-normalized.
+
+Note that the accounts below are not at all complete, they are
+intended as a quick first cut.  Several of these should be
+investigated in much more depth.
+
+Karpathy on CIFAR: http://karpathy.ca/myblog/2011/04/27/lessons-learned-from-manually-classifying-cifar-10-with-code/
+
+\textbf{Snoek, Larochelle, and Adams (2012)}
+(\link{http://www.cs.toronto.edu/\~jasper/bayesopt.pdf}{link}):
+``Practical Bayesian Optimization of Machine Learning Algorithms''.
+Appears to provide the best results at the time of writing.  They used
+a three-layer convolutional neural network.  Achieved an error on the
+test set of 14.98\%.  This is over 3\% better than state of the art
+(without augmenting the data).  They then augmented the data using
+horizontal reflections and translations, getting the error down to 9.5
+\% on the test set.
+
+An interesting aspect of the project is that they learnt the
+hyper-parameters automatically.  In particular, they did a Bayesian
+optimization to learn 9 separate hyper-parameters, including the
+number of epochs, the learning rate, and the width, scale and power of
+the response normalization in the pooling layers.  The learned
+hyper-parameters significantly outperform a human expert's
+optimization of the hyper-parameters.  Their expert achieved 18\% and
+11\% error (without and with data augmentation, respectively).
+
+Code from this project is available.  Note that Jasper Snoek is at U
+of T, but will be leaving for Harvard in September.  They based their
+convolutional net implementation on cuda-convnet.
+
+\textbf{Krizhevsky, Sutskever, and Hinton (2012):}
+(\link{http://books.nips.cc/papers/files/nips25/NIPS2012\_0534.pdf}{link})
+``ImageNet Classification with Deep Convolutional Neural Networks'' A
+four-layer convolutional neural net achieved 13\% test error rate
+without local response normalization, and 11\% with local response
+normalization.  Used cuda-convnet.
+
+\textbf{Ciresan, Meier, and Schmidhuber (2012):}
+(\link{http://www.idsia.ch/\~ciresan/data/cvpr2012.pdf}{link})
+``Multi-column deep neural networks for image classification''
+Achieves 11.21\% error for CIFAR-10.  Achieves 0.23 \% error for
+MNIST.  Claims that humans get a 0.2\% error, with citation (would be
+interesting to look up).  Use a deep convolutional network.  They do
+basic backprop, with no pretraining.  The architecture is to repeat a
+convolutional layer followed by max pooling multiple times, followed
+by some fully connected layers.  They use 2 by 2 receptive fields and
+max-pooling regions.  It appears that the stride length is 2, as well.
+Somewhat similar to Krizhevsky et al's ImageNet paper.  They use a
+fully online training algorithm.  They use a GPU.  They use what they
+call a multi-column deep neural network, which I don't quite
+understand --- looks to be a technique for training multiple networks
+and combining the results.  They used a (scaled) tanh function for
+convolutional and fully connected layers, a linear activation function
+(does this mean rectified?) for max-pooling layers, and softmax at the
+output.  They used online gradient descent, with an annealed learning
+rate (0.001, decaying by a factor of 0.993 after every epoch), and
+continual translations, scaling and rotation of images.  Initial
+weights are drawn from a uniform random distribution in the range
+[-0.05, 0.05].
+
+MNIST architecture: 29 by 29 input; a 20-map convolutional layer, with
+a receptive field of 4 by 4; max-pooling of 2 by 2 regions; a 40-map
+convolutional layer with 5 by 5 receptive field; max-pooling of 3 by 3
+regions; fully connected layer with 150 neurons; fully connected
+(softmax) layer with 10 neurons.
+
+CIFAR architecture: 3 by 32 by 32 input; 300-map convolutional layer,
+with 3 by 3 receptive fields; max-pooling of 2 by 2 regions; 300-map
+convolutional layer, with 2 by 2 receptive fields; max-pooling of 2 by
+2 regions; 300 convolutional maps, 2 by 2 receptive fields;
+max-pooling of 2 by 2 regions; then fully connected layers with 300,
+100 and 10 neurons.
+
+Augmenting the training set (by translating up to 5\%) helps a lot.
+Scaling (up to 15 percent), rotation (up to 5 degrees) and additional
+translations (up to 15 percent) helps a little extra.
+
+The contrast between the Krizhevsky and Ciresan results suggests that
+ideas like dropout and rectified linear units make a big difference.
+
+Q: How much difference does the larger number of maps in the
+convolutional layers make?
+
+\textbf{Tentative conclusions:} Use, in roughly this order: Martens'
+initialization; rectified linear units; dropout; augmented training
+data; annealed learning rate.  It'd be interesting to look at the
+local contrast normalization.  Also try looking at Nesterov's momentum
+method.  The Ciresan results suggest some benefit from using lots of
+maps in the convolutional layers.
+
+
 \section{Grandmother cell (Wikipedia)}
 
 Apparently proposed in the late 1960s by Konorski and Lettvin.
@@ -2597,7 +2753,34 @@ recognition performance.  There are some general heuristics: \emph{use
 
 \section{Future reading}
 
+Ciresan 2012 on MNIST, and Rifai 2011 (``The manifold tangent
+classifier'') on MNIST.
+
+Kiros 2013: http://www.ualberta.ca/\~rkiros/kiros\_thesis\_jun5.pdf
+Best reported results on MNIST when no distortions are used
+
+Interesting comments on image recognition: https://news.ycombinator.com/item?id=5994851
+
+Saxe et al: ``On random weights and unsupervised feature learning''
+(2011).  On hyper-parameter optimization.  One of Ng's collaborators.
+
+LeCun on recent Ng results: https://plus.google.com/104362980539466846301/posts/5ab217HugeF
+
+Goodfellow: https://plus.google.com/103174629363045094445/posts/dh7UT9xbMW4
+
 \textbf{SIFT:}
+
+Tips on what works: https://news.ycombinator.com/item?id=5994851
+
+``Fast, accurate detection of 100,000 object classes on a single
+machine'':
+http://googleresearch.blogspot.ca/2013/06/fast-accurate-detection-of-100000.html
+
+Hinton: ``Where do features come from?'': http://scholar.google.ca/citations?view\_op=view\_citation\&hl=en\&user=JicYPdAAAAAJ\&sortby=pubdate\&citation\_for\_view=JicYPdAAAAAJ:L\_l9e5I586QC
+
+Bengio lecture notes
+
+Seide 2011 on deep learning and Microsoft's MAVIS system.
 
 Bengio and COurville: ``Deep learning of representations''
 http://www.iro.umontreal.ca/~bengioy/papers/BengioCourvilleChapter.pdf
@@ -2684,10 +2867,17 @@ Tenenbaum 2011: How to grow a mind
 
 Rumelhart et al on backprop.
 
+BigBrain Atlas: http://news.sciencemag.org/sciencenow/2013/06/bigbrain-atlas-unveiled.html
+
+Hinton on DReDnets: http://techtalks.tv/talks/drednets/58115/
+
 \textbf{Distributed deep learning:}
 \link{http://research.google.com/archive/large\_deep\_networks_nips2012.html}{link}.
 
 \textbf{Stanford tutorial:} http://ufldl.stanford.edu/wiki/index.php/UFLDL\_Tutorial
+
+Eliot R. Smith: ``What do connectionism and social psychology off each
+other?''  Good for something of an exterior point of view.
 
 \textbf{To do:} Contrastive divergence
 (http://learning.cs.toronto.edu/~hinton/absps/cdmiguel.pdf and
@@ -2724,6 +2914,7 @@ http://scholar.google.ca/scholar?cluster=18396613610240979409\&hl=en\&as\_sdt=0,
 \textbf{Egri and Schultz:} Found a neural network capable of
 recognizing prime numbers.
 http://www.cs.mcgill.ca/\~legri1/prime06.pdf
+
 
 
 \end{document}
