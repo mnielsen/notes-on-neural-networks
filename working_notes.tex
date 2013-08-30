@@ -2529,6 +2529,19 @@ ideas like dropout and rectified linear units make a big difference.
 Q: How much difference does the larger number of maps in the
 convolutional layers make?
 
+\textbf{Goodfellow, Warde-Farley, Mirza, COurville, Bengio (2013):}
+\link{http://arxiv.org/abs/1302.4389}{link} ``Maxout networks'': Test
+set error of 12.93 \%. 
+
+``We define a simple new model called maxout... designed to both
+facilitate optimization by droput and improve the accuracy of
+dropout's fast approximate model averaging technique.''
+
+Preprocessed the data using global contrast normalization and ZCA
+whitening.  Best model consists of three convolutional maxout layers
+followed by a fully connected maxout layer, then finally a softmax
+layer.
+
 \textbf{Tentative conclusions:} Use, in roughly this order: Martens'
 initialization; rectified linear units; dropout; augmented training
 data; annealed learning rate.  It'd be interesting to look at the
@@ -2753,6 +2766,10 @@ recognition performance.  There are some general heuristics: \emph{use
 
 \section{Future reading}
 
+On the display of scientific papers: https://news.ycombinator.com/item?id=6042742
+
+Connectomics - a recent approach: http://arxiv.org/abs/1306.5709
+
 Ciresan 2012 on MNIST, and Rifai 2011 (``The manifold tangent
 classifier'') on MNIST.
 
@@ -2769,6 +2786,7 @@ LeCun on recent Ng results: https://plus.google.com/104362980539466846301/posts/
 Goodfellow: https://plus.google.com/103174629363045094445/posts/dh7UT9xbMW4
 
 \textbf{SIFT:}
+
 
 Tips on what works: https://news.ycombinator.com/item?id=5994851
 
@@ -2793,6 +2811,10 @@ Recent Bengio paper on new approach to deep learning:http://arxiv.org/abs/1306.1
 
 Elliasmith
 
+Levesque: http://www.cs.toronto.edu/~hector/Papers/ijcai-13-paper.pdf
+
+On feedback in the brain: http://blogs.scientificamerican.com/mind-guest-blog/2013/08/08/this-brain-discovery-may-overturn-a-century-old-theory/
+
 Martens 2010: Hessian-Free optimization, and sparse initialization.
 
 Bengio et al ``Scaling Learning algorithms towards AI'' 2007
@@ -2810,6 +2832,8 @@ Agre.
 Hubel and Wiesel: 1959.  Simple and Complex.  The basic model of V1.
 
 Frome 2009: Large-scale Privacy Protection in Google Street View
+
+Deep Learning for the Masses: http://gigaom.com/2013/08/16/were-on-the-cusp-of-deep-learning-for-the-masses-you-can-thank-google-later/
 
 \textbf{Collobert:} ``Natural language processing almost from scratch:''
 
