@@ -220,6 +220,8 @@ when training.
 
 \end{itemize}
 
+Add a note: data agmentation works nearly as well.  We should push on that.
+
 \subsection{Other notes}
 
 ``When training with Dropout, a randomly selected subset of
@@ -273,7 +275,50 @@ Alternately, one could view it as the definition of DropConnect.
 \textbf{Q: How do Dropout and DropConnect fare in a sparse network?}
 My guess is that they'll show very interesting behaviour.
 
+\chapter{Short reviews: what do we know about nonlinearities?}
 
+In this chapter I take a very quick and not in-depth look at what is
+known about various nonlinearities.
+
+DasGupta and Schnitger (1994): They want to compare activation
+functions as a function of size and number of layrs.  And they want to
+figure out when two activation functions have essentially the same
+approximating power. ``Our results show that good approximation
+performance... hings on two properties, namely efficient approximation
+of polynomials and efficient approximation of the binary threshold.''
+I have a lot of troubel believing the former; I wonder if it is an
+artifact of their analysis.  The latter seems interesting.
+
+Jarrett et al (2009): ``We show that using non-linearities that
+include rectification and local contrast normalization is the single
+most important ingredient for good accuracy on object recognition
+benchmarks.''  ALso, ``[H]ow do the non-linearities that follow the
+ﬁlter banks inﬂuence the recognition accuracy. The surprising answer
+is that using a rectifying non-linearity is the single most important
+factor in improving the performance of a recognition system. This
+might be due to several reasons: a) the polarity of features is often
+irrelevant to recognize objects, b) the rectiﬁcation eliminates
+cancellations between neighboring ﬁlter outputs when combined with
+average pooling.  Without a rectiﬁcation what is propagated by the
+average down-sampling is just the noise in the input. Also introducing
+a local normalization layer improves the performance.  It appears to
+make supervised learning considerably faster, perhaps because all
+variables have similar variances (akin to the advantages introduced by
+whitening and other decorrelation methods)''
+
+Karlik and Olgac (2009): Investigated a few special cases.
+
+Nair and Hinton (2010): Done in the context of Boltzmann machines.
+They consider noisy rectified linear units (NReLUs), which have output
+$\max(0, x+ N(0, \sigma(x))$, where $N$ denotes a Gaussian random
+variable, as per usual.  Not so clear that it's relevant to us.
+
+Tan, Teo, and Anthony (2011):
+\link{http://link.springer.com/article/10.1007\%2Fs10462-011-9294-y}{link}
+Investigated a few special cases.
+
+Question: What should we bound?  What class of nonlinearities should
+we allow?
 
 \chapter{Queue}
 
