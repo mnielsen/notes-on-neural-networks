@@ -1787,6 +1787,65 @@ were for the elastic distortions, so that's what they converted to the
 GPU.  When doing the conversion they converted MNIST images to 29 x 29
 to get a proper center, which simplifies distortion.
 
+\section{Ciresan (2012)}
+
+\link{http://arxiv.org/pdf/1202.2745.pdf}{link}
+
+Claims that their deep nets can match human performance on recognizing
+human digits and traffic signs.  ``Small (often minimal [what does
+this mean?]) receptive fields of convolutional winner-take-all neurons
+[?] yield large network depth, resulting in roughly as many sparsely
+connected neural layers as found in mammals between retina and visual
+cortex''.  They achieve better-than-human performance on a traffic
+sign benchmark.
+
+They claim records on MNIST, Latin letters, Chinese characters,
+traffic signs, NORB, and CIFAR10.  ``We will show that properly
+trained big and deep DNNs can outperform all previous methods, and
+demonstrate that unsupervised initialization/pretraining is not
+necessary (although we don't deny that it might help sometimes,
+especially for small datasets).''  Again, we're back to this
+fundamental question: how much does pretraining help?  How necessary
+is it?
+
+They use winner-take-all neurons.  It occurs to me that this has some
+similarity to sparsity constraints.  Same?  Again, they were inspired
+by Hubel and Wiesel --- simple cells (orientation), and complex cells
+(basically, pooling).
+
+Very similar architecture to the KSH paper --- convolutional, max
+pooling, convolutional, max pooling, fully connected, fully connected.
+
+They use this multi-columnar architecture, along lines I've seen
+before in their papers.  They make strong claims that this helps a
+lot.  Worth understanding.  The general idea seems to be to try to set
+up slightly different training techniques, and then to average.
+
+Scaled tanh for conv and fully conn layers.  Linear activation for
+max-pooling, and softmax for output. They use an annealed learning
+rate.  THey use translations, scaling and rotation during training.
+They use a very simple initial weight distribution: uniform on [-0.05,
+0.05]!  This really surprises me.
+
+They train for 800 epochs.
+
+Chinese character recognition: they have 3755 classes, and just 240
+samples per class, and they learn an error rate of 6.5 percent, which
+is a big improvement over the old record of 10.01 percent.
+
+The traffic sign results are fascinating.  They use the GTSRB traffic
+sign dataset --- the German Traffic Sign Benchmark.  They do some
+preprocessing, and then apply their deep network.  They get an error
+rate of 0.54 percent on the test set, which is apparently about a
+factor of two lower than humans.  I can see why it's tough --- a lot
+of the images are difficult to see well.  If it rejects the 6.67
+percent of images about which it is least confident, then the system
+makes only a single misclassification (0.01 percent error rate).  
+
+Typical learning schedule (MNIST): 0.001 initialization, decays by
+factor 0.993 after each epoch.
+
+
 \section{Domingos (2012)} 
 
 \link{http://scholar.google.ca/scholar?cluster=4404716649035182981\&hl=en\&as\_sdt=0,5}{link}

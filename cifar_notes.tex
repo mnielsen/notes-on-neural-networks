@@ -24,6 +24,22 @@ rely on them!
 
 \chapter{Papers}
 
+\section{Dahl, Sainath, Hinton 2013}
+
+This is about acoustic models, studied using rectified linear units
+and dropout.  Punchline: they get a 4.2 percent improvement over
+sigmoid units by using ReLUs and dropout.
+
+Speech recognition used to be done by hidden Markov models.  Now
+replaced by deep nets.  TIMIT (small-scale phone recognition), LVSR
+(large-scale task).  Dropout as similar to denoising auto-encoders.
+``ALthough dropout is trivial to incorporate into minibatched SGD the
+best way of adding it to 2nd order optimization methods is an open
+research question.''  They find an undesirable interaction between HF
+optimizer and SGD.  They used the Bayesian optimizer to find the right
+hyper-parameters.
+
+
 \section{KSH configuration}
 
 
@@ -146,9 +162,53 @@ convolutional layers, and weight decay of 0.03
 Krizhevsky notes that rescaling the overall cost function has the
 effect of changing the effective overall learning rate.
 
+\section{Snoek, Larochelle, and Adams (2012)}
+
+``IN this work we consider the automatic tuning problem within the
+framework of Bayesin optimization... The tractable posterior
+distribution... leads to efficient use of the information gathered by
+previous experiments.... we show how the effects of the Gaussian
+process prior and the associated inference procedure can have a large
+impact on the success or failure of Bayesian
+optimization... thoughtful choices can lead to results that exceed
+expert-level performance in tuning machine learning algorithms.''
+
+They do it not just for neural nets but for a whole bundle of
+algorithms.  Of course, it's especially important for neural nets,
+since they have so many hyper-parameters.
+
+``... these high-level parameters are often considered a nuisance,
+making it desirable to develop algorithms with as few of these `knobs'
+as possible.  Another, more flexible take on this issue is to view the
+optimization of high-level parameters as a procedure to be
+automated.''
+
+``For continuous functions [like the cost function, one presumes],
+Bayesian optimization typically works by assuming the unknown function
+[which?] was sampled from a Gaussian process (GP) and maintains a
+posterior distribution for this function as observations are made.''
+
+What I think this means is: set up Gaussians on our hyper-parameters.
+Then sample, and look to see the cost on the validation data.
+
+We have a function $f(x)$ on a bounded subset of $R^D$.  We're going
+to construct a probabilistic model of $f(x)$.  The idea is to use the
+information we get from evaluations of $f(x)$ to improve our model ---
+and to choose where to evaluate next.  ``This results in a procedure
+that can find the minimum of difficult non-convex functions with
+relatively few evaluations, at the cost of performing more computation
+to determine the next point to try.''
+
+Two choices: a prior over functions.  They choose the Gaussian process
+prior.  I'm not quite sure what this means in this context.  Second,
+they choose an acquisition function, to construct a utility function
+from the model posterior.  Not sure what this means.
+
+Gaussian process.  Suppose we have a set of points $x_n$ in our
+domain.  T
 
 \section{Wan et al (2013) -- ``Regularization of Neural Networks using
-  DropConnect}
+  DropConnect''}
 
 \subsection{Summary of the main points} 
 
